@@ -3,7 +3,8 @@
 use RohanAdhikari\NepaliDate\Traits\DateConverter;
 
 describe('conversion', function () {
-    $class = new class {
+    $class = new class
+    {
         use DateConverter;
     };
     it('conver adtobs', function () use ($class) {

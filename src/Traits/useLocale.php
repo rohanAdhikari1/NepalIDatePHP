@@ -207,10 +207,11 @@ trait useLocale
         return $partData[$index - 1];
     }
 
-    protected static function getIndexFromLocaleValue(string $part, string $value, ?string $locale = null): int|null
+    protected static function getIndexFromLocaleValue(string $part, string $value, ?string $locale = null): ?int
     {
         $partData = static::getLocalePartFor($part, $locale);
         $index = array_search($value, $partData, true);
+
         return $index !== false ? $index : null;
     }
 
@@ -291,25 +292,25 @@ trait useLocale
     }
 
     // retrieve index
-    protected static function getIndexFromMonths(string $month): int|null
+    protected static function getIndexFromMonths(string $month): ?int
     {
         return static::getIndexFromLocaleValue('months', $month, NepaliDateInterface::ENGLISH) ??
             static::getIndexFromLocaleValue('months', $month, NepaliDateInterface::NEPALI);
     }
 
-    protected static function getIndexFromShortMonths(string $month): int|null
+    protected static function getIndexFromShortMonths(string $month): ?int
     {
         return static::getIndexFromLocaleValue('shortMonths', $month, NepaliDateInterface::ENGLISH) ??
             static::getIndexFromLocaleValue('shortMonths', $month, NepaliDateInterface::NEPALI);
     }
 
-    protected static function getIndexFromWeekDays(string $month): int|null
+    protected static function getIndexFromWeekDays(string $month): ?int
     {
         return static::getIndexFromLocaleValue('weekdays', $month, NepaliDateInterface::ENGLISH) ??
             static::getIndexFromLocaleValue('weekdays', $month, NepaliDateInterface::NEPALI);
     }
 
-    protected static function getIndexFromShortWeekDays(string $month): int|null
+    protected static function getIndexFromShortWeekDays(string $month): ?int
     {
         return static::getIndexFromLocaleValue('shortWeekdays', $month, NepaliDateInterface::ENGLISH) ??
             static::getIndexFromLocaleValue('shortWeekdays', $month, NepaliDateInterface::NEPALI);

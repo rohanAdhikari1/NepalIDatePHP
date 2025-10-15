@@ -4,7 +4,8 @@ use RohanAdhikari\NepaliDate\NepaliDateInterface;
 use RohanAdhikari\NepaliDate\Traits\useLocale;
 
 describe('Locale Functions Test', function () {
-    $class = new class {
+    $class = new class
+    {
         use useLocale;
     };
     it('return correct locale', function () use ($class) {
