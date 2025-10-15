@@ -9,7 +9,7 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 use RohanAdhikari\NepaliDate\Constants\Calendar;
-use Rohanadhikari\NepaliDate\Traits\DateConverter;
+use RohanAdhikari\NepaliDate\Traits\DateConverter;
 use RohanAdhikari\NepaliDate\Traits\haveDateFormats;
 use RohanAdhikari\NepaliDate\Traits\haveDateGetters;
 use RohanAdhikari\NepaliDate\Traits\haveDateParse;
@@ -146,7 +146,7 @@ class NepaliDate implements NepaliDateInterface
     public static function fromTimestamp(int $timestamp, string|DateTimeZone $timezone = 'Asia/Kathmandu'): static
     {
         try {
-            $adDate = new DateTime('@'.$timestamp, static::resolveTimeZone($timezone));
+            $adDate = new DateTime('@' . $timestamp, static::resolveTimeZone($timezone));
         } catch (\Exception $e) {
             throw new \InvalidArgumentException("Invalid timestamp: $timestamp");
         }

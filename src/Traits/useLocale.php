@@ -138,7 +138,7 @@ trait useLocale
 
     public static function getAvailableLocales(): array
     {
-        return array_unique(array_keys(self::$defaultLocales));
+        return array_keys(self::$defaultLocales);
     }
 
     public static function getLocaleDataFor(string $locale): array

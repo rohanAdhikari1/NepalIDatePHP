@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rohanadhikari\NepaliDate\Traits;
+namespace RohanAdhikari\NepaliDate\Traits;
 
 use RohanAdhikari\NepaliDate\Constants\Calendar;
 

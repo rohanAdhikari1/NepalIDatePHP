@@ -5,7 +5,8 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "RohanAdhikari\\NepaliDate\\": "src/"
+            "RohanAdhikari\\NepaliDate\\": "src/",
+            "Tests\\": "tests/"
         }
     },
     "authors": [
@@ -16,7 +17,8 @@
     ],
     "scripts": {
         "analyse":"vendor/bin/phpstan analyse",
-        "format": "vendor/bin/pint"
+        "format": "vendor/bin/pint",
+        "test" : "vendor/bin/pest --colors=always"
     },
     "minimum-stability": "stable",
     "require-dev": {
