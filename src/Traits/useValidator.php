@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rohanadhikari\NepaliDate\Traits;
+namespace RohanAdhikari\NepaliDate\Traits;
 
 use RohanAdhikari\NepaliDate\Constants\Calendar;
-use Rohanadhikari\NepaliDate\Exceptions\NepaliDateOutOfBoundsException;
+use RohanAdhikari\NepaliDate\Exceptions\NepaliDateOutOfBoundsException;
 
 trait useValidator
 {
@@ -66,7 +66,7 @@ trait useValidator
     public static function validateAdDate(int $year, int $month, int $day): void
     {
         if (! self::isvalidAdYear($year)) {
-            throw new NepaliDateOutOfBoundsException("Invalid AD year: $year. Valid range is ".Calendar::START_YEAR_AD.' to '.(Calendar::START_DAY_AD + (Calendar::END_YEAR_BS - Calendar::START_YEAR_BS)).'.');
+            throw new NepaliDateOutOfBoundsException("Invalid AD year: $year. Valid range is " . Calendar::START_YEAR_AD . ' to ' . (Calendar::START_DAY_AD + (Calendar::END_YEAR_BS - Calendar::START_YEAR_BS)) . '.');
         }
         if (! self::isvalidMonth($month)) {
             throw new NepaliDateOutOfBoundsException("Invalid month: $month. Valid range is 1 to 12.");
@@ -80,7 +80,7 @@ trait useValidator
     public static function validateBSYear(int $year): void
     {
         if (! self::isvalidBsYear($year)) {
-            throw new NepaliDateOutOfBoundsException("Invalid BS year: $year. Valid range is ".Calendar::START_YEAR_BS.' to '.Calendar::END_YEAR_BS.'.');
+            throw new NepaliDateOutOfBoundsException("Invalid BS year: $year. Valid range is " . Calendar::START_YEAR_BS . ' to ' . Calendar::END_YEAR_BS . '.');
         }
     }
 

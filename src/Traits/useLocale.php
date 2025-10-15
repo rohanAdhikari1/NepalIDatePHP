@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace RohanAdhikari\NepaliDate\Traits;
 
-use Rohanadhikari\NepaliDate\Exceptions\InvalidNepaliDateLocale;
+use RohanAdhikari\NepaliDate\Exceptions\InvalidNepaliDateLocale;
 use RohanAdhikari\NepaliDate\NepaliDateInterface;
 
 trait useLocale
@@ -207,11 +207,11 @@ trait useLocale
         return $partData[$index - 1];
     }
 
-    public static function getIndexFromLocaleValue(string $part, string $value, ?string $locale = null): int|bool
+    protected static function getIndexFromLocaleValue(string $part, string $value, ?string $locale = null): int|null
     {
         $partData = static::getLocalePartFor($part, $locale);
-
-        return array_search($value, $partData, true);
+        $index = array_search($value, $partData, true);
+        return $index !== false ? $index : null;
     }
 
     public static function getNumberConverter(string $locale): ?callable
@@ -250,8 +250,6 @@ trait useLocale
 
             self::$overrides[$locale][$part] = $values;
         }
-
-        self::$overrides[$locale][$part] = $values;
     }
 
     public function resetLocale(): static
@@ -293,25 +291,25 @@ trait useLocale
     }
 
     // retrieve index
-    protected static function getIndexFromMonth(string $month): int|bool
+    protected static function getIndexFromMonths(string $month): int|null
     {
         return static::getIndexFromLocaleValue('months', $month, NepaliDateInterface::ENGLISH) ??
             static::getIndexFromLocaleValue('months', $month, NepaliDateInterface::NEPALI);
     }
 
-    protected static function getIndexFromShortMonth(string $month): int|bool
+    protected static function getIndexFromShortMonths(string $month): int|null
     {
         return static::getIndexFromLocaleValue('shortMonths', $month, NepaliDateInterface::ENGLISH) ??
             static::getIndexFromLocaleValue('shortMonths', $month, NepaliDateInterface::NEPALI);
     }
 
-    protected static function getIndexFromWeekDays(string $month): int|bool
+    protected static function getIndexFromWeekDays(string $month): int|null
     {
         return static::getIndexFromLocaleValue('weekdays', $month, NepaliDateInterface::ENGLISH) ??
             static::getIndexFromLocaleValue('weekdays', $month, NepaliDateInterface::NEPALI);
     }
 
-    protected static function getIndexFromShortWeekDays(string $month): int|bool
+    protected static function getIndexFromShortWeekDays(string $month): int|null
     {
         return static::getIndexFromLocaleValue('shortWeekdays', $month, NepaliDateInterface::ENGLISH) ??
             static::getIndexFromLocaleValue('shortWeekdays', $month, NepaliDateInterface::NEPALI);

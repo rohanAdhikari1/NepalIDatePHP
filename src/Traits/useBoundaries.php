@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace RohanAdhikari\NepaliDate\Traits;
 
-use Rohanadhikari\NepaliDate\Exceptions\NepaliDateExceptions;
-use Rohanadhikari\NepaliDate\Exceptions\NepaliDateUnknownUnitException;
+use RohanAdhikari\NepaliDate\Exceptions\NepaliDateExceptions;
+use RohanAdhikari\NepaliDate\Exceptions\NepaliDateUnknownUnitException;
 use RohanAdhikari\NepaliDate\NepaliUnit;
 use RohanAdhikari\NepaliDate\NepaliWeekDay;
 

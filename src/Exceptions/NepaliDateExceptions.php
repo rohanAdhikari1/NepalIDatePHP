@@ -1,6 +1,6 @@
 <?php
 
-namespace Rohanadhikari\NepaliDate\Exceptions;
+namespace RohanAdhikari\NepaliDate\Exceptions;
 
 use Exception;
 
