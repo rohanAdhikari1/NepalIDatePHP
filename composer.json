@@ -1,0 +1,26 @@
+{
+    "name": "rohanadhikari/nepali-date",
+    "description": "A package for managing NepaliDate and Time.",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "RohanAdhikari\\NepaliDate\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Rohan Adhikari",
+            "email": "official@rohanadhikari.com.np"
+        }
+    ],
+    "scripts": {
+        "analyse":"vendor/bin/phpstan analyse",
+        "format": "vendor/bin/pint"
+    },
+    "minimum-stability": "stable",
+    "require-dev": {
+        "phpstan/phpstan": "^2.1",
+        "laravel/pint": "^1.25"
+    }
+}
