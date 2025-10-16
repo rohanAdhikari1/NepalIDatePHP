@@ -1,6 +1,6 @@
 # NepaliDate
 
-A PHP Composer package for handling **Nepali Date and Time (Bikram Sambat - BS)** with full support for localization, date manipulation, and formatting. All calculations are based on the **Nepali calendar**, making it perfect for applications targeting Nepali users or systems that operate primarily in BS.
+A PHP package for handling **Nepali Date and Time (Bikram Sambat - BS)** with full support for localization, date manipulation, and formatting. All calculations are based on the **Nepali calendar**, making it perfect for applications targeting Nepali users or systems that operate primarily in BS.
 
 ---
 
@@ -59,10 +59,11 @@ $immutableDate = $date->toImmutable();
 $newDate = $immutableDate->addDays(10);       // Returns a new instance, original remains unchanged
 ```
 
-**Note:** You can see the available constants [here](./docs/CONSTANTS.md)
+> [!NOTE]  
+> You can see the available constants [here](./docs/CONSTANTS.md)
 
 > [!NOTE]  
->  This package has been developed to provide Nepali Date and Time support (BS), but **many parts of the documentation are still in progress**.  
+>  This package is being developed to provide Nepali Date and Time support (BS), but **many parts of the documentation are still in progress**.  
 > Some features may not be fully documented yet.  
 > Testing, updates, and additional maintenance will be resumed after a few months.
 
