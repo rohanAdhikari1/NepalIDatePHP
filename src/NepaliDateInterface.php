@@ -481,7 +481,15 @@ interface NepaliDateInterface
 
     public function convertNumberToLocale(int|string $number, ?string $locale = null): string;
 
-    public static function customizeocale(string $locale, array $data): void;
+    public static function customizeLocale(string $locale, array $data): void;
+
+    public static function customizeLocaleMonths(string $locale, array $months): void;
+
+    public static function customizeLocaleShortMonths(string $locale, array $months): void;
+
+    public static function customizeLocaleWeekDays(string $locale, array $weekDays): void;
+
+    public static function customizeLocaleShortWeekDays(string $locale, array $weekDays): void;
 
     public function resetLocale(): static;
 

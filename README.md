@@ -1,4 +1,4 @@
-# NepaliDate
+# NepaliDateTime
 
 A PHP Composer package for handling **Nepali Date and Time (Bikram Sambat - BS)** with full support for localization, date manipulation, and formatting. All calculations are based on the **Nepali calendar**, making it perfect for applications targeting Nepali users or systems that operate primarily in BS.
 
@@ -21,7 +21,7 @@ A PHP Composer package for handling **Nepali Date and Time (Bikram Sambat - BS)*
 Install via [Composer](https://getcomposer.org/):
 
 ```bash
-composer require rohanadhikari/nepali-date
+composer require rohanadhikari/nepali-datetime
 ```
 
 ---

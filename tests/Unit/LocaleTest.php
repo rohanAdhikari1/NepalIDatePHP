@@ -30,7 +30,7 @@ describe('Locale Functions Test', function () {
 
     it('does locale customize work', function () use ($class) {
         $class::resetAllLocaleData();
-        $class::customizeocale(NepaliDateInterface::ENGLISH, ['months' => [
+        $class::customizeLocale(NepaliDateInterface::ENGLISH, ['months' => [
             'Baisakh',
             'Jestha',
             'Ashar',

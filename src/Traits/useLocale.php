@@ -231,7 +231,12 @@ trait useLocale
         return $converter($number);
     }
 
-    public static function customizeocale(string $locale, array $data): void
+    protected static function isMultidimensional(array $array): bool
+    {
+        return count($array) !== count($array, COUNT_RECURSIVE);
+    }
+
+    public static function customizeLocale(string $locale, array $data): void
     {
         if (! self::localeExists($locale)) {
             throw new InvalidNepaliDateLocale("Locale '{$locale}' does not exist. Cannot customize.");
@@ -240,6 +245,10 @@ trait useLocale
         foreach ($data as $part => $values) {
             if (! isset(self::$defaultLocales[$locale][$part])) {
                 throw new InvalidNepaliDateLocale("Cannot customize unknown part '{$part}' in locale '{$locale}'.");
+            }
+
+            if (! is_array($values) || self::isMultidimensional($values)) {
+                throw new InvalidNepaliDateLocale("The '{$part}' values must be a one-dimensional array.");
             }
 
             if (($part === 'months' || $part === 'shortMonths') && count($values) !== 12) {
@@ -251,6 +260,26 @@ trait useLocale
 
             self::$overrides[$locale][$part] = $values;
         }
+    }
+
+    public static function customizeLocaleMonths(string $locale, array $months): void
+    {
+        static::customizeLocale($locale, ['months' => $months]);
+    }
+
+    public static function customizeLocaleShortMonths(string $locale, array $months): void
+    {
+        static::customizeLocale($locale, ['shortMonths' => $months]);
+    }
+
+    public static function customizeLocaleWeekDays(string $locale, array $weekDays): void
+    {
+        static::customizeLocale($locale, ['weekdays' => $weekDays]);
+    }
+
+    public static function customizeLocaleShortWeekDays(string $locale, array $weekDays): void
+    {
+        static::customizeLocale($locale, ['shortWeekdays' => $weekDays]);
     }
 
     public function resetLocale(): static
