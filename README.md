@@ -116,7 +116,7 @@ use RohanAdhikari\NepaliDate\NepaliDate;
 
 $nepaliDate = NepaliDate::fromNotation('tomorrow');
 
-echo $nepaliDate->format('Y-m-d'); // e.g. 2082-06-31
+echo $nepaliDate->format(NepaliDate::FORMAT_DATE_YMD); // e.g. 2082-06-31
 ```
 
 ### Using Unix Timestamp
@@ -155,15 +155,53 @@ Manually create a new `NepaliDate` instance by providing all date components.
 ```php
 use RohanAdhikari\NepaliDate\NepaliDate;
 
-$nepalidate = new NepaliDate(2082,6,30,timestamp:'Asia/kathmandu')
+$nepalidate = new NepaliDate(2082,6,30,timezone:'Asia/kathmandu')
 ```
 
-## Customize Locale Data
+> [!NOTE]  
+>  This package has been developed to provide Nepali Date and Time support (BS), but **many parts of the documentation are still in progress**.  
+> Some features may not be fully documented yet.  
+> Testing, updates, and additional maintenance will be resumed after a few months.
 
-You can also customize locale Data.
+## 🌐 Locale
+
+// TODO: document getLocale, setLocale, localeExists, etc.
+
+## ➕ Unit Operations (Add/Subtract)
+
+// TODO: document addDays, addMonths, subYears, etc.
+
+## 🔍 Getters
+
+// TODO: document getYear, getMonth, getDay, etc.
+
+## ⚙️ Setters
+
+// TODO: document setYear, setTime, setUnit, etc.
+
+## 📏 Boundaries Functions
+
+// TODO: document startOfDay, endOfMonth, etc.
+
+## 🔎 Comparison
+
+// TODO: document eq, gt, lt, between, isToday, etc.
+
+## Additional
+
+### 🌐 Locale Customization
+
+You can customize locale data for months, weekdays, numbers, and more.  
 For detailed instructions, see the [LocaleCustomize](./docs/LOCALECUSTOMIZE.md) documentation.
 
-## Extra / Bonus
+---
+
+### ⚡ Custom Functions / Macros
+
+You can also add your own functions or macros to extend `NepaliDateTime` functionality.  
+For detailed instructions, see the [Macro](./docs/MACRO.md) documentation.
+
+---
 
 ### NepaliNumbers
 
