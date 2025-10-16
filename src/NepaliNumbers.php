@@ -225,11 +225,11 @@ class NepaliNumbers
         return $formattedAmount;
     }
 
-    public static function getNepaliWord(string $amount, bool $currency = true, string $locale = 'np', bool $only = false): string
+    public static function getNepaliWord(string|int $amount, bool $currency = true, string $locale = 'np', bool $only = false): string
     {
-        $integer = $amount;
+        $integer = (int)$amount;
         $decimal = '';
-        if (strpos($amount, '.') !== false) {
+        if (strpos((string)$amount, '.') !== false) {
             [$integer, $dec] = explode('.', $amount, 2);
             $decimal = substr($dec, 0, 2);
         }

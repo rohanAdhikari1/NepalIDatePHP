@@ -27,3 +27,13 @@ composer require rohanadhikari/nepali-datetime
 ---
 
 ## Usage
+
+## Customize Locale Data
+
+You can also customize locale Data.
+For detailed instructions, see the [LocaleCustomize](./docs/LOCALECUSTOMIZE.md) documentation.
+
+## NepaliNumbers (As Extra)
+
+You can also use the `NepaliNumbers` class to work with Nepali numerals.
+For detailed information, see the [NepaliNumbers](./docs/NEPALINUMBERS.md) documentation.
