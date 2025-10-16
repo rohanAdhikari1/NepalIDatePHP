@@ -1,6 +1,6 @@
 ## Customizing Locale Data
 
-You can customize locale `Months`, `ShortMonths`, `WeekDays`, and `ShortWeekDays` for `NepaliDateTime`.
+You can customize locale `Months`, `ShortMonths`, `WeekDays`, and `ShortWeekDays` for `NepaliDate`.
 Available locales are `en` and `np`.
 
 You can reference locales using constants:
