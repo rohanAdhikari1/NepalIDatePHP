@@ -14,12 +14,12 @@ trait useOverFlowBounds
     protected static bool $globalOverflow = false;
 
     protected static array $globalBoundStates = [
-        'month' => true,
-        'day' => true,
-        'weekday' => true,
-        'hour' => true,
-        'minute' => true,
-        'second' => true,
+        'month' => null,
+        'day' => null,
+        'weekday' => null,
+        'hour' => null,
+        'minute' => null,
+        'second' => null,
     ];
 
     /**
@@ -27,15 +27,15 @@ trait useOverFlowBounds
      * LOCAL BOUNDS (instance)
      * ----------------------------
      */
-    protected bool $localOverflow = false;
+    protected ?bool $localOverflow = null;
 
     protected array $localBoundStates = [
-        'month' => true,
-        'day' => true,
-        'weekday' => true,
-        'hour' => true,
-        'minute' => true,
-        'second' => true,
+        'month' => null,
+        'day' => null,
+        'weekday' => null,
+        'hour' => null,
+        'minute' => null,
+        'second' => null,
     ];
 
     /**
@@ -73,21 +73,23 @@ trait useOverFlowBounds
 
     public function overflowLocal(bool $enable = true): static
     {
-        $this->localOverflow = $enable;
+        $instance = $this->castInstance();
+        $instance->localOverflow = $enable;
 
-        return $this;
+        return $instance;
     }
 
     public function overflowBound(string $type, bool $enable = true): static
     {
-        if (array_key_exists($type, $this->localBoundStates)) {
+        $instance = $this->castInstance();
+        if (array_key_exists($type, $instance->localBoundStates)) {
             if (self::$strictMode && (self::$globalBoundStates[$type] ?? false) && ! $enable) {
-                return $this;
+                return $instance;
             }
-            $this->localBoundStates[$type] = $enable;
+            $instance->localBoundStates[$type] = $enable;
         }
 
-        return $this;
+        return $instance;
     }
 
     /*==========================================================
@@ -99,15 +101,25 @@ trait useOverFlowBounds
      */
     public static function isGlobalBoundActive(string $type): bool
     {
-        return self::$globalOverflow && (self::$globalBoundStates[$type] ?? false);
+        $state = self::$globalBoundStates[$type] ?? null;
+        if ($state === null) {
+            return self::$globalOverflow;
+        }
+
+        return (bool) $state;
     }
 
     /**
-     * Check if a specific local bound is active.
+     * Get local bound state or null
      */
-    public function isLocalBoundActive(string $type): bool
+    public function isLocalBoundActive(string $type): ?bool
     {
-        return $this->localOverflow && ($this->localBoundStates[$type] ?? false);
+        return $this->localBoundStates[$type] ?? null;
+    }
+
+    public function isOverflowActive(): bool
+    {
+        return $this->localOverflow ?? static::$globalOverflow;
     }
 
     /**
@@ -121,12 +133,46 @@ trait useOverFlowBounds
         }
 
         // If strict mode is enabled and the global bound is active, local cannot disable it
-        if (self::$strictMode && self::isGlobalBoundActive($type)) {
+        if (static::$strictMode && static::$globalOverflow && static::isGlobalBoundActive($type)) {
             return true;
         }
 
-        // Otherwise, fall back to local overflow settings
-        return self::isGlobalBoundActive($type) || $this->isLocalBoundActive($type);
+        if (! $this->isOverflowActive()) {
+            return false;
+        }
+
+        return $this->isLocalBoundActive($type) ?? static::isGlobalBoundActive($type);
+    }
+
+    public static function resetOverflowSettings(): void
+    {
+        self::$globalOverflow = false;
+        self::$globalBoundStates = [
+            'month' => null,
+            'day' => null,
+            'weekday' => null,
+            'hour' => null,
+            'minute' => null,
+            'second' => null,
+        ];
+
+        self::$strictMode = false;
+    }
+
+    public function resetOverflow(): static
+    {
+        $instance = $this->castInstance();
+        $instance->localOverflow = null;
+        $instance->localBoundStates = [
+            'month' => null,
+            'day' => null,
+            'weekday' => null,
+            'hour' => null,
+            'minute' => null,
+            'second' => null,
+        ];
+
+        return $instance;
     }
 
     /*===========================================

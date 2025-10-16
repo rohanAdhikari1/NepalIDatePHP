@@ -348,8 +348,6 @@ interface NepaliDateInterface
 
     public function shiftToNearWeek(int|NepaliWeekDay $weekday, bool $up = true): static;
 
-    public function isBoundActive(string $type): bool;
-
     // Boundries
     public function startOfDay(): static;
 
@@ -496,4 +494,27 @@ interface NepaliDateInterface
     public static function resetAllLocaleData(): void;
 
     public function getLocaleMonths(): array;
+
+    // overflow bounds
+    public static function overflowGlobal(bool $enable = true): void;
+
+    public static function overflowGlobalBound(string $type, bool $enable = true): void;
+
+    public static function setStrictMode(bool $enable): void;
+
+    public function overflowLocal(bool $enable = true): static;
+
+    public function overflowBound(string $type, bool $enable = true): static;
+
+    public static function isGlobalBoundActive(string $type): bool;
+
+    public function isLocalBoundActive(string $type): ?bool;
+
+    public function isOverflowActive(): bool;
+
+    public function isBoundActive(string $type): bool;
+
+    public static function resetOverflowSettings(): void;
+
+    public function resetOverflow(): static;
 }

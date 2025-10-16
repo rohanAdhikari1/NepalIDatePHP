@@ -187,18 +187,18 @@ class NepaliNumbers
 
         $parts = explode('.', $num);
         $int = $parts[0];
-        $dec = isset($parts[1]) && intval($parts[1]) > 0 ? '.' . $parts[1] : '';
+        $dec = isset($parts[1]) && intval($parts[1]) > 0 ? '.'.$parts[1] : '';
 
         $last3 = substr($int, -3);
         $rest = substr($int, 0, -3);
 
         if ($rest != '') {
-            $last3 = ',' . $last3;
+            $last3 = ','.$last3;
         }
 
         $rest = preg_replace("/\B(?=(\d{2})+(?!\d))/", ',', $rest);
 
-        return $rest . $last3 . $dec;
+        return $rest.$last3.$dec;
     }
 
     public static function getNepaliCurrency(int|string $amount, bool|string $symbol = true, bool $only = false, bool $format = true, string $locale = 'np'): string
@@ -215,22 +215,22 @@ class NepaliNumbers
             $formattedAmount = self::convertToNepali($formattedAmount);
         }
         if ($currencySymbol) {
-            $formattedAmount = $currencySymbol . ' ' . $formattedAmount;
+            $formattedAmount = $currencySymbol.' '.$formattedAmount;
         }
         if ($only) {
             $postfix = $locale === 'np' ? 'मात्र' : '/-';
-            $formattedAmount = $formattedAmount . ' ' . $postfix;
+            $formattedAmount = $formattedAmount.' '.$postfix;
         }
 
         return $formattedAmount;
     }
 
-    public static function getNepaliWord(string|int $amount, bool $currency = true, string $locale = 'np', bool $only = false): string
+    public static function getNepaliWord(int|string $amount, bool $currency = true, string $locale = 'np', bool $only = false): string
     {
-        $integer = (int)$amount;
+        $integer = $amount = (string) $amount;
         $decimal = '';
-        if (strpos((string)$amount, '.') !== false) {
-            [$integer, $dec] = explode('.', $amount, 2);
+        if (strpos((string) $amount, '.') !== false) {
+            [$integer, $dec] = explode('.', (string) $amount, 2);
             $decimal = substr($dec, 0, 2);
         }
         $result = self::converter($locale)($integer, $currency);
@@ -245,14 +245,14 @@ class NepaliNumbers
                     $join = ', ';
                     $end = ' पैसा';
                 }
-                $result .= $join . self::converter($locale)($decimal, $currency) . $end;
+                $result .= $join.self::converter($locale)($decimal, $currency).$end;
             } else {
-                $result .= '.  ' . self::converter($locale)($decimal, $currency);
+                $result .= '.  '.self::converter($locale)($decimal, $currency);
             }
         }
         if ($only) {
             $postfix = $locale === 'np' ? 'मात्र' : 'Only';
-            $result .= ' ' . $postfix;
+            $result .= ' '.$postfix;
         }
 
         return $result;
@@ -261,12 +261,12 @@ class NepaliNumbers
     public static function converter(string $locale = 'en'): callable
     {
         if ($locale === 'np') {
-            return function ($num) {
-                return self::convertNepali($num);
+            return function (int|string $num) {
+                return self::convertNepali((string) $num);
             };
         } else {
-            return function ($num) {
-                return self::convertEnglish($num);
+            return function (int|string $num) {
+                return self::convertEnglish((string) $num);
             };
         }
     }
@@ -279,7 +279,7 @@ class NepaliNumbers
         $tens = (int) floor($num / 10) * 10;
         $ones = $num % 10;
 
-        return self::EN_WORDS[$tens] . ($ones ? ' ' . self::EN_WORDS[$ones] : '');
+        return self::EN_WORDS[$tens].($ones ? ' '.self::EN_WORDS[$ones] : '');
     }
 
     private static function convertEnglish(string $n): string
@@ -311,7 +311,7 @@ class NepaliNumbers
         foreach ($parts as $p) {
             $num = intval($p);
             if ($num > 0) {
-                $str .= ' ' . self::twoDigitToWords($num) . ' ' . $units[$unitIndex];
+                $str .= ' '.self::twoDigitToWords($num).' '.$units[$unitIndex];
             }
             $unitIndex--;
         }
@@ -350,7 +350,7 @@ class NepaliNumbers
         foreach ($parts as $p) {
             $num = intval($p);
             if ($num > 0) {
-                $str .= ' ' . self::NP_WORDS[$num] . ' ' . $units[$unitIndex];
+                $str .= ' '.self::NP_WORDS[$num].' '.$units[$unitIndex];
             }
             $unitIndex--;
         }

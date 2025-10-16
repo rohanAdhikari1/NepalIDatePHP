@@ -47,7 +47,7 @@ describe(
 
         it('throws exception for numbers greater than supported', function () {
             $largeNumber = str_repeat('1', 21); // More than Shankh
-            expect(fn() => NepaliNumbers::getNepaliWord($largeNumber, locale: 'en'))->toThrow(\InvalidArgumentException::class);
+            expect(fn () => NepaliNumbers::getNepaliWord($largeNumber, locale: 'en'))->toThrow(\InvalidArgumentException::class);
         });
     }
 );
