@@ -28,12 +28,36 @@ composer require rohanadhikari/nepali-datetime
 
 ## Usage
 
+Example:
+
+```php
+    //mutable
+    $now = NepaliDate::now();
+    $immutablenow = NepaliDateImmutable::now();
+    $date = NepaliDate::fromNotation('tomorrow');
+    $date->addDays(5);
+    $addate = $date->toAd();
+    $formmatted = $date->format(NepaliDate::FORMAT_DATETIME_24_FULL);
+    //immutable
+    $immutabledate = $date->cast();
+    // or
+    $immutabledate = $date->toImmutable();
+    $newdate = $immutabledate->addDays(10);
+```
+
 ## Customize Locale Data
 
 You can also customize locale Data.
 For detailed instructions, see the [LocaleCustomize](./docs/LOCALECUSTOMIZE.md) documentation.
 
-## NepaliNumbers (As Extra)
+## Extra / Bonus
+
+### NepaliNumbers
 
 You can also use the `NepaliNumbers` class to work with Nepali numerals.
 For detailed information, see the [NepaliNumbers](./docs/NEPALINUMBERS.md) documentation.
+
+<!-- ### Calender
+
+You can use the `Calendar` class to work with total days in a year and to get week information.
+For detailed information, see the [Calender](./docs/CALENDER.md) documentation. -->

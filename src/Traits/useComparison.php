@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace RohanAdhikari\NepaliDate\Traits;
 
-use RohanAdhikari\NepaliDate\Constants\Calendar;
 use RohanAdhikari\NepaliDate\NepaliDateInterface;
 
 trait useComparison

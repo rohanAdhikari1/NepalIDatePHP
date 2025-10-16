@@ -182,8 +182,8 @@ interface NepaliDateInterface
     public const FORMAT_READABLE_DATETIME2 = 'D, d M Y H:i:s';  // Wed, 29 Asw 2082 12:50:05
 
     // ISO and RFC Formats
-    // public const FORMAT_ISO_8601             = 'c';
-    // public const FORMAT_RFC_2822             = 'r';
+    public const FORMAT_ISO_8601             = 'c';
+    public const FORMAT_RFC_2822             = 'r';
     public const FORMAT_UNIX_TIMESTAMP = 'U';
 
     // File Safe Format
@@ -447,8 +447,6 @@ interface NepaliDateInterface
     public function isNowOrFuture(): bool;
 
     public function isNowOrPast(): bool;
-
-    public function isLeapYear(): bool;
 
     // locale
     public function getLocale(): string;

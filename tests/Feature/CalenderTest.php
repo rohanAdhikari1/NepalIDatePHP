@@ -28,7 +28,6 @@ it('returns correct BS month days', function () {
         ->and(Calendar::getDaysInBSMonth(2082, 6))->toBe(31);
 });
 
-
 it('calculates total AD days correctly', function () {
     $prevDay = Calendar::getTotalADDays(2024, 2, 29);
     $nextDay = Calendar::getTotalADDays(2024, 3, 1);
@@ -51,7 +50,6 @@ it('calculates total BS days correctly', function () {
         ->and($days2000)->toBe(36526)
         ->and($days2001)->toBe(36891);
 
-
     $prevDay = Calendar::getTotalBSDays(2005, 2, 31);
     $nextDay = Calendar::getTotalbSDays(2005, 3, 1);
     expect($nextDay - $prevDay)->toBe(1);
@@ -64,7 +62,6 @@ it('calculates total BS days correctly', function () {
     $sameDay2 = Calendar::getTotalBSDays(2082, 6, 30);
     expect($sameDay2 - $sameDay1)->toBe(0);
 });
-
 
 it('calculates correct day of week for BS date', function () {
     $day = Calendar::calculateDayOfWeek(2082, 6, 30);
