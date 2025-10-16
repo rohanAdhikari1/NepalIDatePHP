@@ -152,9 +152,4 @@ trait useComparison
     {
         return $this->lessThanOrEqualTo($this->nowWithSameTz());
     }
-
-    public function isLeapYear(): bool
-    {
-        return Calendar::isLeapYearBs($this->year);
-    }
 }

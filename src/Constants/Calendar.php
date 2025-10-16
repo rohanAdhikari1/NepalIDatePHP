@@ -6,9 +6,9 @@ namespace RohanAdhikari\NepaliDate\Constants;
 
 final class Calendar
 {
-    public const BASE_YEAR_BS = 2000;
+    public const BASE_YEAR_BS = 1900;
 
-    public const START_YEAR_BS = 2000;
+    public const START_YEAR_BS = 1900;
 
     public const START_MONTH_BS = 9;
 
@@ -16,15 +16,15 @@ final class Calendar
 
     public const START_WEEK_DAY_BS = 7;
 
-    public const BASE_YEAR_AD = 1944;
+    public const BASE_YEAR_AD = 1844;
 
-    public const START_YEAR_AD = 1943;
+    public const START_YEAR_AD = 1843;
 
     public const START_MONTH_AD = 4;
 
-    public const START_DAY_AD = 14;
+    public const START_DAY_AD = 13;
 
-    public const START_WEEK_DAY_AD = 4;
+    public const START_WEEK_DAY_AD = 5;
 
     public const END_YEAR_BS = 2100;
 
@@ -37,7 +37,7 @@ final class Calendar
         1904 => [31, 32, 31, 32, 31, 30, 30, 30, 29, 29, 30, 31],
         1905 => [31, 31, 31, 32, 31, 31, 29, 30, 30, 29, 30, 30],
         1906 => [31, 31, 32, 31, 31, 31, 30, 29, 30, 29, 30, 30],
-        1907 => [31, 32, 31, 31, 31, 30, 30, 29, 30, 29, 30, 30],
+        1907 => [31, 32, 31, 32, 31, 30, 30, 29, 30, 29, 30, 30],
         1908 => [31, 32, 31, 32, 31, 30, 30, 30, 29, 29, 30, 31],
         1909 => [31, 31, 31, 32, 31, 31, 30, 29, 30, 29, 30, 30],
         1910 => [31, 31, 32, 31, 31, 31, 30, 29, 30, 29, 30, 30],
@@ -53,7 +53,7 @@ final class Calendar
         1920 => [30, 32, 31, 32, 31, 30, 30, 30, 29, 30, 29, 31],
         1921 => [31, 31, 32, 31, 31, 31, 30, 29, 30, 29, 30, 30],
         1922 => [31, 31, 32, 32, 31, 30, 30, 29, 30, 29, 30, 30],
-        1923 => [31, 32, 31, 31, 31, 30, 30, 30, 29, 29, 30, 31],
+        1923 => [31, 32, 31, 32, 31, 30, 30, 30, 29, 30, 29, 31],
         1924 => [30, 32, 31, 32, 31, 31, 29, 30, 29, 30, 29, 31],
         1925 => [31, 31, 32, 31, 31, 31, 30, 29, 30, 29, 30, 30],
         1926 => [31, 31, 32, 32, 31, 30, 30, 29, 30, 29, 30, 30],
@@ -95,7 +95,7 @@ final class Calendar
         1962 => [31, 32, 31, 32, 31, 30, 30, 30, 29, 29, 30, 31],
         1963 => [31, 31, 31, 32, 31, 31, 30, 29, 30, 29, 30, 30],
         1964 => [31, 31, 32, 31, 31, 31, 30, 29, 30, 29, 30, 30],
-        1965 => [31, 32, 31, 32, 31, 30, 30, 30, 29, 29, 29, 30],
+        1965 => [31, 32, 31, 32, 31, 30, 30, 30, 29, 29, 30, 30],
         1966 => [31, 32, 31, 32, 31, 30, 30, 30, 29, 30, 29, 31],
         1967 => [31, 31, 31, 32, 31, 31, 30, 29, 30, 29, 30, 30],
         1968 => [31, 31, 32, 31, 31, 31, 30, 29, 30, 29, 30, 30],
@@ -292,10 +292,5 @@ final class Calendar
         $totalDays += $day;
 
         return $totalDays;
-    }
-
-    public static function isLeapYearBs($year): bool
-    {
-        return Calendar::getDaysInBSMonth($year, 11) === 30;
     }
 }
