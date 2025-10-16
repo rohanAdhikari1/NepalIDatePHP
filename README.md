@@ -7,12 +7,14 @@ A PHP Composer package for handling **Nepali Date and Time (Bikram Sambat - BS)*
 ## 🚀 Features
 
 - 🕒 Works in **Nepali (BS) date and time**
-- 🗓 Simple function to **convert AD → BS**
+- 🗓 Simple function to **convert between AD & BS**
 - 🔁 Support for **mutable** and **immutable** date handling
 - ➕ Add or subtract days, months, and years in BS
 - 📅 Get current Nepali date and time
 - 🌐 Customizable **locale** (Nepali or English)
-- 🔢 Format dates in various display styles and many more.
+- 🔢 Format dates in various display styles
+- ⚙️ Compare, parse, and format dates easily
+- 🧩 Integration-ready with Laravel and other frameworks
 
 ---
 
@@ -28,21 +30,132 @@ composer require rohanadhikari/nepali-datetime
 
 ## Usage
 
-Example:
+```php
+use RohanAdhikari\NepaliDate\NepaliDate;
+use RohanAdhikari\NepaliDate\NepaliDateImmutable;
+
+// -----------------------------
+// Mutable NepaliDate
+// -----------------------------
+$now = NepaliDate::now(); // Current Nepali date and time
+
+$date = NepaliDate::fromNotation('tomorrow'); // Parse a notation
+$date->addDays(5);                            // Add 5 days
+
+$adDate = $date->toAd();                       // Convert to Gregorian (AD)
+
+$formatted = $date->format(NepaliDate::FORMAT_DATETIME_24_FULL);
+// Example: 2082-06-30 14:45:22
+
+// -----------------------------
+// Immutable NepaliDate
+// -----------------------------
+$immutableNow = NepaliDateImmutable::now();   // Immutable current date
+
+$immutableDate = $date->cast();               // Cast mutable to immutable and vice versa
+// or
+$immutableDate = $date->toImmutable();
+
+$newDate = $immutableDate->addDays(10);       // Returns a new instance, original remains unchanged
+```
+
+**Note:** You can see the available constants [here](./docs/CONSTANTS.md)
+
+## ⚙️ Initialize
+
+Create a new **NepaliDate** instance in different ways depending on your use case.
+
+---
+
+### Now
+
+Returns a `NepaliDate` instance initialized with the **current Nepali date and time**.
+
+**Parameters:**
+
+- `timezone` _(optional)_ — Defaults to `'Asia/Kathmandu'`.
+
+**Example:**
 
 ```php
-    //mutable
-    $now = NepaliDate::now();
-    $immutablenow = NepaliDateImmutable::now();
-    $date = NepaliDate::fromNotation('tomorrow');
-    $date->addDays(5);
-    $addate = $date->toAd();
-    $formmatted = $date->format(NepaliDate::FORMAT_DATETIME_24_FULL);
-    //immutable
-    $immutabledate = $date->cast();
-    // or
-    $immutabledate = $date->toImmutable();
-    $newdate = $immutabledate->addDays(10);
+use RohanAdhikari\NepaliDate\NepaliDate;
+
+$now = NepaliDate::now();
+echo $now->format(NepaliDate::FORMAT_DATETIME_12_FULL); // 2082-06-30 10:09:38 PM
+//you can also specify timezone as
+$now = NepaliDate::now('Asia/Kathmandu');
+//or
+$timezone = new DateTimeZone('Asia/Kathmandu');
+NepaliDate::now($timezone);
+```
+
+### Using PHP Native DateTime
+
+Create a `NepaliDate` instance directly from a PHP native `DateTime` (AD).  
+This automatically converts the **Gregorian (AD)** date into the **Nepali (BS)** calendar.
+
+```php
+use RohanAdhikari\NepaliDate\NepaliDate;
+$date = new DateTime();
+$nepalidate = NepaliDate::fromAd($date);
+echo $nepaliDate->format(NepaliDate::FORMAT_DATE_YMD); // 2082-06-30
+```
+
+### Using DateTime Notation
+
+Create a `NepaliDate` instance using a **natural language date string** (like `'now'`, `'yesterday'`, `'tomorrow'`).  
+This internally parses the notation using Native DateTime and converts it into a corresponding **Nepali (BS)** date.
+
+- `notation` — A date string supported by PHP’s native `DateTime` parser (e.g., `'now'`, `'yesterday'`, `'2025-01-01'`, `'next monday'`).
+- `timezone` _(optional)_ — Defaults to `'Asia/Kathmandu'`.
+
+**Example**
+
+```php
+use RohanAdhikari\NepaliDate\NepaliDate;
+
+$nepaliDate = NepaliDate::fromNotation('tomorrow');
+
+echo $nepaliDate->format('Y-m-d'); // e.g. 2082-06-31
+```
+
+### Using Unix Timestamp
+
+Create a `NepaliDate` instance from a **Unix timestamp**.  
+This method first converts the timestamp into a PHP `DateTime` object and then translates it into the equivalent **Nepali (BS)** date and time.
+
+**Parameters**
+
+- `timestamp` — A valid Unix timestamp (seconds since Unix epoch).
+- `timezone` _(optional)_ — Defaults to `'Asia/Kathmandu'`.
+  **Example**
+
+```php
+use RohanAdhikari\NepaliDate\NepaliDate;
+
+$nepaliDate = NepaliDate::fromTimestamp(1760632252);
+
+echo $nepaliDate->format(NepaliDate::FORMAT_DATETIME_24_FULL); // e.g. 2082-06-30 22:15:52
+```
+
+### Direct
+
+Manually create a new `NepaliDate` instance by providing all date components.
+
+**Parameters**
+
+- `year` - Nepali year (e.g. `2082`)
+- `month` - Nepali month number (`1–12`)
+- `day` — Day of month (`1–32`, varies by **year** and **month**)
+- `hour` _(optional)_ — Defaults to `0`
+- `minute` _(optional)_ — Defaults to `0`
+- `second` _(optional)_ — Defaults to `0`
+- `timezone` _(optional)_ — Defaults to `'Asia/Kathmandu'`.
+
+```php
+use RohanAdhikari\NepaliDate\NepaliDate;
+
+$nepalidate = new NepaliDate(2082,6,30,timestamp:'Asia/kathmandu')
 ```
 
 ## Customize Locale Data

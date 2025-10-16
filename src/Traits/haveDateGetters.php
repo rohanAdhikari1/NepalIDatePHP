@@ -252,7 +252,7 @@ trait haveDateGetters
 
     public function getLocaleTwoDigitHour(): string
     {
-        return $this->convertNumberToLocale($this->getTwoDigitShortHour());
+        return $this->convertNumberToLocale($this->getTwoDigitHour());
     }
 
     public function getLocaleMinute(): string
