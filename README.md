@@ -1,4 +1,4 @@
-# NepaliDateTime
+# NepaliDate
 
 A PHP Composer package for handling **Nepali Date and Time (Bikram Sambat - BS)** with full support for localization, date manipulation, and formatting. All calculations are based on the **Nepali calendar**, making it perfect for applications targeting Nepali users or systems that operate primarily in BS.
 
@@ -23,7 +23,7 @@ A PHP Composer package for handling **Nepali Date and Time (Bikram Sambat - BS)*
 Install via [Composer](https://getcomposer.org/):
 
 ```bash
-composer require rohanadhikari/nepali-datetime
+composer require rohanadhikari/nepali-date
 ```
 
 ---
@@ -61,6 +61,11 @@ $newDate = $immutableDate->addDays(10);       // Returns a new instance, origina
 
 **Note:** You can see the available constants [here](./docs/CONSTANTS.md)
 
+> [!NOTE]  
+>  This package has been developed to provide Nepali Date and Time support (BS), but **many parts of the documentation are still in progress**.  
+> Some features may not be fully documented yet.  
+> Testing, updates, and additional maintenance will be resumed after a few months.
+
 ## ⚙️ Initialize
 
 Create a new **NepaliDate** instance in different ways depending on your use case.
@@ -89,6 +94,8 @@ $timezone = new DateTimeZone('Asia/Kathmandu');
 NepaliDate::now($timezone);
 ```
 
+---
+
 ### Using PHP Native DateTime
 
 Create a `NepaliDate` instance directly from a PHP native `DateTime` (AD).  
@@ -100,6 +107,8 @@ $date = new DateTime();
 $nepalidate = NepaliDate::fromAd($date);
 echo $nepaliDate->format(NepaliDate::FORMAT_DATE_YMD); // 2082-06-30
 ```
+
+---
 
 ### Using DateTime Notation
 
@@ -113,11 +122,13 @@ This internally parses the notation using Native DateTime and converts it into a
 
 ```php
 use RohanAdhikari\NepaliDate\NepaliDate;
-
+// Create NepaliDate for tomorrow and format it
 $nepaliDate = NepaliDate::fromNotation('tomorrow');
 
 echo $nepaliDate->format(NepaliDate::FORMAT_DATE_YMD); // e.g. 2082-06-31
 ```
+
+---
 
 ### Using Unix Timestamp
 
@@ -137,6 +148,8 @@ $nepaliDate = NepaliDate::fromTimestamp(1760632252);
 
 echo $nepaliDate->format(NepaliDate::FORMAT_DATETIME_24_FULL); // e.g. 2082-06-30 22:15:52
 ```
+
+---
 
 ### Direct
 
@@ -158,10 +171,11 @@ use RohanAdhikari\NepaliDate\NepaliDate;
 $nepalidate = new NepaliDate(2082,6,30,timezone:'Asia/kathmandu')
 ```
 
-> [!NOTE]  
->  This package has been developed to provide Nepali Date and Time support (BS), but **many parts of the documentation are still in progress**.  
-> Some features may not be fully documented yet.  
-> Testing, updates, and additional maintenance will be resumed after a few months.
+---
+
+## Format
+
+## Parse
 
 ## 🌐 Locale
 
@@ -187,7 +201,13 @@ $nepalidate = new NepaliDate(2082,6,30,timezone:'Asia/kathmandu')
 
 // TODO: document eq, gt, lt, between, isToday, etc.
 
+---
+
 ## Additional
+
+<!-- ## Usage in Laravel Example
+
+For detailed instructions on using **NepaliDate** in a Laravel application, see the [Laravel Integration Guide](./docs/LARAVEL.md). -->
 
 ### 🌐 Locale Customization
 
@@ -208,7 +228,7 @@ For detailed instructions, see the [Macro](./docs/MACRO.md) documentation.
 You can also use the `NepaliNumbers` class to work with Nepali numerals.
 For detailed information, see the [NepaliNumbers](./docs/NEPALINUMBERS.md) documentation.
 
-<!-- ### Calender
+<!-- ### Calendar
 
 You can use the `Calendar` class to work with total days in a year and to get week information.
-For detailed information, see the [Calender](./docs/CALENDER.md) documentation. -->
+For detailed information, see the [Calendar](./docs/CALENDER.md) documentation. -->

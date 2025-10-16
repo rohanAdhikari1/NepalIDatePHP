@@ -1,5 +1,5 @@
 {
-    "name": "rohanadhikari/nepali-datetime",
+    "name": "rohanadhikari/nepali-date",
     "description": "A package for managing NepaliDate and Time.",
     "type": "library",
     "license": "MIT",
