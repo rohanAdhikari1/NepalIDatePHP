@@ -77,27 +77,29 @@ use RohanAdhikari\NepaliDate\NepaliDateImmutable;
 // Mutable example
 // -----------------------------
 $now = NepaliDate::now();
-echo $now->format(NepaliDate::FORMAT_DATETIME_24_FULL) . PHP_EOL;
+echo $now->format(NepaliDate::FORMAT_DATETIME_24_FULL);
 
 // -----------------------------
 // Immutable example
 // -----------------------------
 $immutable = NepaliDateImmutable::now();
 $new = $immutable->addDays(5); // returns a new instance
-echo $new->format(NepaliDate::FORMAT_DATE_YMD) . PHP_EOL;
+echo $new->format(NepaliDate::FORMAT_DATE_YMD);
 
 // -----------------------------
 // Create from native DateTime (AD)
 // -----------------------------
 $ad = new DateTime('now', new DateTimeZone('Asia/Kathmandu'));
 $fromAd = NepaliDate::fromAd($ad);
-echo $fromAd->format(NepaliDate::FORMAT_DATE_YMD) . PHP_EOL;
+echo $fromAd->format(NepaliDate::FORMAT_DATE_YMD);
 ```
 
 Notes:
 
 - Make sure `vendor/autoload.php` path is correct relative to your script.
 - Composer is the recommended way to load the package. If you don't use Composer you would need to include the package files manually (not recommended).
+
+---
 
 ## ⚙️ Initialize
 
@@ -324,9 +326,48 @@ Available locales: `en` and `np`.
 
 ---
 
-## 📏 Boundaries Functions
+## 📏 Boundaries Methods
 
-// TODO: document startOfDay, endOfMonth, etc.
+Boundary methods are used to snap a date/time to the start or end of a defined unit. This is extremely useful for:
+
+- Rounding dates to the beginning or end of a day, week, month, or year.
+
+- Performing date calculations for calendars.
+
+- Filtering datasets by time ranges.
+
+### Available Methods
+
+| Method                  | Description                                                                                |
+| ----------------------- | ------------------------------------------------------------------------------------------ |
+| startOfDay()            | Sets the time to the very beginning of the day (00:00:00).                                 |
+| endOfDay()              | Sets the time to the very end of the day (23:59:59).                                       |
+| startOfWeek($weekStart) | Moves the date to the first day of the week (Monday by default, customizable).             |
+| endOfWeek($weekEnd)     | Moves the date to the last day of the week (Sunday by default, customizable).              |
+| startOfMonth()          | Moves the date to the first day of the month at 00:00:00.                                  |
+| endOfMonth()            | Moves the date to the last day of the month at 23:59:59.                                   |
+| startOfQuarter()        | Moves the date to the first day of the current quarter at 00:00:00.                        |
+| endOfQuarter()          | Moves the date to the last day of the current quarter at 23:59:59.                         |
+| startOfYear()           | Moves the date to the first day of the year at 00:00:00.                                   |
+| endOfYear()             | Moves the date to the last day of the year at 23:59:59.                                    |
+| startOfDecade()         | Moves the date to the first year of the decade at 00:00:00.                                |
+| endOfDecade()           | Moves the date to the last year of the decade at 23:59:59.                                 |
+| startOfCentury()        | Moves the date to the first year of the century at 00:00:00.                               |
+| endOfCentury()          | Moves the date to the last year of the century at 23:59:59.                                |
+| startOfMillennium()     | Moves the date to the first year of the millennium at 00:00:00.                            |
+| endOfMillennium()       | Moves the date to the last year of the millennium at 23:59:59.                             |
+| startOfHour()           | Sets minutes and seconds to 00:00 of the current hour.                                     |
+| endOfHour()             | Sets minutes and seconds to 59:59 of the current hour.                                     |
+| startOfMinute()         | Sets seconds to 00 of the current minute.                                                  |
+| endOfMinute()           | Sets seconds to 59 of the current minute.                                                  |
+| startOf(unit)           | Generic method to snap the date to the start of a specified unit (day, month, year, etc.). |
+| endOf(unit)             | Generic method to snap the date to the end of a specified unit (day, month, year, etc.).   |
+
+**Example:**
+
+```php
+
+```
 
 ---
 
