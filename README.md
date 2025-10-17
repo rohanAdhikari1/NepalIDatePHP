@@ -62,10 +62,42 @@ $newDate = $immutableDate->addDays(10);       // Returns a new instance, origina
 > [!NOTE]  
 > You can see the available constants [here](./docs/CONSTANTS.md)
 
-> [!NOTE]  
->  This package is being developed to provide Nepali Date and Time support (BS), but **many parts of the documentation are still in progress**.  
-> Some features may not be fully documented yet.  
-> Testing, updates, and additional maintenance will be resumed after a few months.
+## Using in native PHP (no framework)
+
+If you're not using a framework, you can still use this package in plain PHP. The easiest way is to install via Composer and include the generated autoloader.
+
+```php
+// Require Composer's autoloader (adjust path as needed)
+require __DIR__ . '/vendor/autoload.php';
+
+use RohanAdhikari\NepaliDate\NepaliDate;
+use RohanAdhikari\NepaliDate\NepaliDateImmutable;
+
+// -----------------------------
+// Mutable example
+// -----------------------------
+$now = NepaliDate::now();
+echo $now->format(NepaliDate::FORMAT_DATETIME_24_FULL) . PHP_EOL;
+
+// -----------------------------
+// Immutable example
+// -----------------------------
+$immutable = NepaliDateImmutable::now();
+$new = $immutable->addDays(5); // returns a new instance
+echo $new->format(NepaliDate::FORMAT_DATE_YMD) . PHP_EOL;
+
+// -----------------------------
+// Create from native DateTime (AD)
+// -----------------------------
+$ad = new DateTime('now', new DateTimeZone('Asia/Kathmandu'));
+$fromAd = NepaliDate::fromAd($ad);
+echo $fromAd->format(NepaliDate::FORMAT_DATE_YMD) . PHP_EOL;
+```
+
+Notes:
+
+- Make sure `vendor/autoload.php` path is correct relative to your script.
+- Composer is the recommended way to load the package. If you don't use Composer you would need to include the package files manually (not recommended).
 
 ## ⚙️ Initialize
 
@@ -176,27 +208,127 @@ $nepalidate = new NepaliDate(2082,6,30,timezone:'Asia/kathmandu')
 
 ## Format
 
-## Parse
+Formats the `NepaliDate` instance according to the provided pattern and locale-specific rules, and returns a string of the formatted date. You can also use predefined fromat pattern from [Constants](./docs/CONSTANTS.md#date-formats).
+
+**List of Available Formats Tokens**
+
+| Format | Output Example                  | Meaning                                 |
+| ------ | ------------------------------- | --------------------------------------- |
+| Y      | 2082                            | Year                                    |
+| y      | 82                              | Two-digit year                          |
+| m      | 2                               | Month (1–12)                            |
+| n      | 02                              | Month, two digits                       |
+| M      | Bai                             | Short month name                        |
+| F      | Baisakh                         | Full month name                         |
+| d      | 09                              | Two-digit day                           |
+| j      | 9                               | Day                                     |
+| D      | Sun                             | Short weekday name                      |
+| l      | Sunday                          | Full weekday name                       |
+| w      | 1                               | Weekday number (Sunday=1, Monday=2…)    |
+| G      | 7                               | Hour, 24-hour clock                     |
+| H      | 07                              | Hour, 24-hour clock, 2-digits           |
+| h      | 23                              | Hour, 12-hour clock                     |
+| g      | 12                              | Hour, 12-hour clock, 2-digits           |
+| a      | am / pm                         | Meridiem (lowercase)                    |
+| A      | AM / PM                         | Meridiem (uppercase)                    |
+| i      | 59                              | Minute, 2-digits                        |
+| s      | 59                              | Second, 2-digits                        |
+| e      | Asia/Kathmandu                  | Timezone name                           |
+| O      | +0530                           | Timezone offset                         |
+| P      | +05:45                          | Timezone offset with colon              |
+| Z      | 20700                           | Timezone offset in seconds              |
+| c      | 2082-02-01T14:30:00+05:45       | ISO 8601 datetime                       |
+| r      | Sun, 01 Bai 2082 14:30:00 +0530 | RFC 2822 datetime                       |
+| U      | 1675289400                      | Unix timestamp (Using Ad Date and Time) |
+
+**Example:**
+
+```php
+    use RohanAdhikari\NepaliDate\NepaliDate;
+    // Get the current Nepali date and time
+    $date = NepaliDate::now();
+
+    // Using a predefined format (24-hour datetime)
+    echo $date->format(NepaliDate::FORMAT_DATETIME_24);
+    // Example output: 2082-06-31 21:14
+
+    // Using a custom format string
+    echo $date->format('Y-m-d H:i');
+    // Example output: 2082-06-31 21:14
+
+    // Using full month name + weekday
+    echo $date->format('l, F j, Y');
+    // Example output: Friday, Ashwin 31, 2082
+
+    // Using ISO 8601 format
+    echo $date->format('c');
+    // Example output: 2082-06-31T21:14:14+05:45
+
+    // Using RFC 2822 format
+    echo $date->format('r');
+    // Example output: Fri, 31 Asw 2082 21:14:14 +0545
+```
+
+---
 
 ## 🌐 Locale
 
-// TODO: document getLocale, setLocale, localeExists, etc.
+Available locales: `en` and `np`.
+
+**Example:**
+
+```php
+    use RohanAdhikari\NepaliDate\NepaliDate;
+
+    $date = NepaliDate::now();
+    $date->setLocale(NepaliDate::NEPALI); //Using defined constant
+    //or
+    $date->locale('np');
+    //or
+    $date->locale = 'np'; //Not supported for ImmmutableNepaliDate
+
+    echo $date->format(NepaliDate::FORMAT_DATETIME_24);
+    //Example Output: २०८२-०६-३१ २१:३४
+```
+
+> [!Note]
+> You can also set the global default locale as:-
+>
+> ```php
+> NepaliDate::defaultLocale(NepaliDate::NEPALI);
+> ```
+>
+> Any new instance of `NepaliDate` will now use this locale by default.
+
+---
+
+## Parse
+
+---
 
 ## ➕ Unit Operations (Add/Subtract)
 
 // TODO: document addDays, addMonths, subYears, etc.
 
+---
+
 ## 🔍 Getters
 
 // TODO: document getYear, getMonth, getDay, etc.
+
+---
 
 ## ⚙️ Setters
 
 // TODO: document setYear, setTime, setUnit, etc.
 
+---
+
 ## 📏 Boundaries Functions
 
 // TODO: document startOfDay, endOfMonth, etc.
+
+---
 
 ## 🔎 Comparison
 

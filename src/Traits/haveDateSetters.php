@@ -86,7 +86,7 @@ trait haveDateSetters
 
     protected function handleSetterDynamicCall(string $method, array $arguments): ?static
     {
-        if (! preg_match('/^set(Year|Month|Day|Hour|Minute|Second|Timezone|TimeZone|TZ|TZone)$/', $method, $matches)) {
+        if (! preg_match('/^set(Year|Month|Day|Hour|Minute|Second|Timezone|TimeZone|TZ|TZone|Locale)$/', $method, $matches)) {
             return null;
         }
         $unit = strtolower($matches[1]);
@@ -94,16 +94,20 @@ trait haveDateSetters
             throw new \InvalidArgumentException("Missing argument for $method");
         }
         $value = $arguments[0];
+        if ($unit === 'locale') {
+            return $this->setLocale($value);
+        }
 
         return $this->setUnit($unit, $value);
     }
 
-    // protected function handleDynamicSet(string $name, $value): ?static
-    // {
-    //     if (preg_match('/^(year|month|day|hour|minute|second|timezone|tz|tzone)$/i', $name, $matches)) {
-    //         return null;
-    //     }
-    //     $unit = $matches[1];
-    //     return $this->setUnit($unit, $value);
-    // }
+    protected function handleDynamicSet(string $name, mixed $value): mixed
+    {
+        $method = 'set'.ucfirst($name);
+        if (method_exists($this, $method)) {
+            return $this->$method($value);
+        }
+
+        return $this->handleSetterDynamicCall($method, [$value]);
+    }
 }

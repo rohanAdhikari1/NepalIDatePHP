@@ -13,6 +13,7 @@ use DateTimeZone;
  * @property int $hour
  * @property int $minute
  * @property int $second
+ * @property string $locale
  * @property DateTimeZone $timezone
  * @property-read int $twoDigitMonth
  * @property-read int $weekDay
