@@ -342,7 +342,20 @@ The `NepaliDate` provides methods to shift dates to their corresponding values b
 
 ### Week
 
-//TODO:
+```php
+use RohanAdhikari\NepaliDate\NepaliDate;
+
+ $nepaliDate = NepaliDate::parse('2082-07-02');
+    // shif to previous monday
+    $nepaliDate->shiftToNearWeek(NepaliWeekDay::Monday, false);
+    echo $nepaliDate->format(NepaliDate::FORMAT_DATE_SLASH_YMD);
+    // shif to next monday
+    $nepaliDate->shiftToNearWeek(NepaliDate::MONDAY);
+    //or
+    $nepaliDate->shiftToNearWeek(NepaliWeekDay::Monday);
+    echo $nepaliDate->format(NepaliDate::FORMAT_DATE_SLASH_YMD);
+
+```
 
 ---
 

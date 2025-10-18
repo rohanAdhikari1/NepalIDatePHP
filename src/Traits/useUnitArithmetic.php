@@ -53,24 +53,24 @@ trait useUnitArithmetic
                 break;
 
             case 'month':
-                $this->month = $this->normalizeOrThrow($this->month + $amount, 12, 'month', fn ($overflow) => $this->_modifyUnit('year', $overflow));
+                $this->month = $this->normalizeOrThrow($this->month + $amount, 12, 'month', fn($overflow) => $this->_modifyUnit('year', $overflow));
                 break;
 
             case 'day':
                 $daysInMonth = Calendar::getDaysInBSMonth($this->year, $this->month);
-                $this->day = $this->normalizeOrThrow($this->day + $amount, $daysInMonth, 'day', fn ($overflow) => $this->_modifyUnit('month', $overflow));
+                $this->day = $this->normalizeOrThrow($this->day + $amount, $daysInMonth, 'day', fn($overflow) => $this->_modifyUnit('month', $overflow));
                 break;
 
             case 'hour':
-                $this->hour = $this->normalizeOrThrow($this->hour + $amount, 23, 'hour', fn ($overflow) => $this->_modifyUnit('day', $overflow), 0);
+                $this->hour = $this->normalizeOrThrow($this->hour + $amount, 23, 'hour', fn($overflow) => $this->_modifyUnit('day', $overflow), 0);
                 break;
 
             case 'minute':
-                $this->minute = $this->normalizeOrThrow($this->minute + $amount, 59, 'minute', fn ($overflow) => $this->_modifyUnit('hour', $overflow), 0);
+                $this->minute = $this->normalizeOrThrow($this->minute + $amount, 59, 'minute', fn($overflow) => $this->_modifyUnit('hour', $overflow), 0);
                 break;
 
             case 'second':
-                $this->second = $this->normalizeOrThrow($this->second + $amount, 59, 'second', fn ($overflow) => $this->_modifyUnit('minute', $overflow), 0);
+                $this->second = $this->normalizeOrThrow($this->second + $amount, 59, 'second', fn($overflow) => $this->_modifyUnit('minute', $overflow), 0);
                 break;
 
             default:
@@ -98,7 +98,7 @@ trait useUnitArithmetic
     {
         $weekday = NepaliWeekDay::int($weekday);
         $instance = $this->castInstance();
-        $diff = $instance->dayOfWeek;
+        $diff = $weekday - $instance->dayOfWeek;
         if ($diff === 0) {
             return $instance;
         }
