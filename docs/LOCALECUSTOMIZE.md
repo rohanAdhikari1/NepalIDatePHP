@@ -84,7 +84,7 @@ You can also customize multiple or all locale fields together by passing an asso
 
 ```php
 use RohanAdhikari\NepaliDate\NepaliDate;
-NepaliDate::customizeocale(NepaliDate::NEPALI,[
+NepaliDate::customizeLocale(NepaliDate::NEPALI,[
     'months' => [
         "बैशाख", "जेठ", "असार", "साउन", "भदौ", "आश्विन",
         "कार्तिक", "मंसिर", "पौष", "माघ", "फाल्गुन", "चैत"

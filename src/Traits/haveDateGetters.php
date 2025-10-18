@@ -167,12 +167,12 @@ trait haveDateGetters
 
     public function getLocaleCentury(): string
     {
-        return $this->convertNumberToLocale($this->getMillennium());
+        return $this->convertNumberToLocale($this->getCentury());
     }
 
     public function getLocaleDecade(): string
     {
-        return $this->convertNumberToLocale($this->getMillennium());
+        return $this->convertNumberToLocale($this->getDecade());
     }
 
     public function getLocaleYear(): string
@@ -288,7 +288,7 @@ trait haveDateGetters
 
     protected function handleDynamicGet(string $name): mixed
     {
-        $method = 'get'.ucfirst($name);
+        $method = 'get' . ucfirst($name);
         if (method_exists($this, $method)) {
             return $this->$method();
         }

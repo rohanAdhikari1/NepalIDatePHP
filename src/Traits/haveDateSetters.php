@@ -29,24 +29,24 @@ trait haveDateSetters
                 break;
 
             case 'month':
-                $instance->month = $this->normalizeOrThrow($value, 12, 'month', fn ($overflow) => $instance->_modifyUnit('year', $overflow));
+                $instance->month = $this->normalizeOrThrow($value, 12, 'month', fn($overflow) => $instance->_modifyUnit('year', $overflow));
                 break;
 
             case 'day':
                 $daysInMonth = Calendar::getDaysInBSMonth($instance->year, $instance->month);
-                $instance->day = $this->normalizeOrThrow($value, $daysInMonth, 'day', fn ($overflow) => $instance->_modifyUnit('month', $overflow));
+                $instance->day = $this->normalizeOrThrow($value, $daysInMonth, 'day', fn($overflow) => $instance->_modifyUnit('month', $overflow));
                 break;
 
             case 'hour':
-                $instance->hour = $this->normalizeOrThrow($value, 23, 'hour', fn ($overflow) => $instance->_modifyUnit('day', $overflow), 0);
+                $instance->hour = $this->normalizeOrThrow($value, 23, 'hour', fn($overflow) => $instance->_modifyUnit('day', $overflow), 0);
                 break;
 
             case 'minute':
-                $instance->minute = $this->normalizeOrThrow($value, 59, 'minute', fn ($overflow) => $instance->_modifyUnit('hour', $overflow), 0);
+                $instance->minute = $this->normalizeOrThrow($value, 59, 'minute', fn($overflow) => $instance->_modifyUnit('hour', $overflow), 0);
                 break;
 
             case 'second':
-                $instance->second = $this->normalizeOrThrow($value, 59, 'second', fn ($overflow) => $instance->_modifyUnit('minute', $overflow), 0);
+                $instance->second = $this->normalizeOrThrow($value, 59, 'second', fn($overflow) => $instance->_modifyUnit('minute', $overflow), 0);
                 break;
 
             case 'timezone':
@@ -93,7 +93,7 @@ trait haveDateSetters
 
     protected function handleDynamicSet(string $name, mixed $value): mixed
     {
-        $method = 'set'.ucfirst($name);
+        $method = 'set' . ucfirst($name);
         if (method_exists($this, $method)) {
             return $this->$method($value);
         }
