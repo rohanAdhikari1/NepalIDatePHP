@@ -25,19 +25,22 @@ trait useUnitArithmetic
     protected function normalizeOrThrow(int $value, int $max, string $unit, callable $overflowCallback, int $min = 1): int
     {
         $range = $max - $min + 1;
-
+        $offset = $value - $min;
         $overflow = intdiv($value - $min, $range);
         if (($value - $min) < 0 && ($value - $min) % $range !== 0) {
             $overflow -= 1;
         }
-
-        $normalized = (($value - $min) % $range + $range) % $range + $min;
         if ($overflow !== 0 && $this->isBoundActive($unit)) {
             throw new NepaliDateOutOfBoundsException("Overflow detected for unit '$unit'.");
         }
         if ($overflow !== 0) {
             $overflowCallback($overflow);
+            if ($unit === 'day') {
+                $max = Calendar::getDaysInBSMonth($this->year, $this->month);
+                $range = $max - $min + 1;
+            }
         }
+        $normalized = ($offset % $range + $range) % $range + $min;
 
         return $normalized;
     }

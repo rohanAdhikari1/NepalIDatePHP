@@ -314,6 +314,12 @@ Available locales: `en` and `np`.
 
 ---
 
+## Dates Difference
+
+// TODO: document addDays, addMonths, subYears, etc.
+
+---
+
 ## 🔍 Getters
 
 // TODO: document getYear, getMonth, getDay, etc.
@@ -323,6 +329,12 @@ Available locales: `en` and `np`.
 ## ⚙️ Setters
 
 // TODO: document setYear, setTime, setUnit, etc.
+
+---
+
+## Shifting TimeZone
+
+//TODO:
 
 ---
 
@@ -366,7 +378,22 @@ Boundary methods are used to snap a date/time to the start or end of a defined u
 **Example:**
 
 ```php
+$nepaliDate = NepaliDateImmutable::now();
+// end of century
+echo $nepaliDate->endOfCentury(); // auto convert to string using FORMAT_DATETIME_24_FULL
+// Example Output: 2100-12-31 23:59:59
 
+// start of decade
+echo $nepaliDate->startOfDecade()->format(NepaliDate::FORMAT_DATE_SLASH_YMD);
+// Example Output: 2080/01/01
+
+//start of quarter
+echo $nepaliDate->startOf(NepaliUnit::Quarter)->format(NepaliDate::FORMAT_DATETIME_24_FULL);
+    // Example Output: 2082-07-01 00:00:00
+
+//end of week
+echo $nepaliDate->endOf(NepaliUnit::Week)->format(NepaliDate::FORMAT_DATETIME_24_FULL);
+// Example Output: 2082-07-01 23:59:59
 ```
 
 ---
