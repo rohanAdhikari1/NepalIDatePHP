@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace RohanAdhikari\NepaliDate\Traits;
 
+use DateTimeZone;
 use RohanAdhikari\NepaliDate\Constants\Calendar;
 use RohanAdhikari\NepaliDate\Exceptions\NepaliDateOutOfBoundsException;
 use RohanAdhikari\NepaliDate\NepaliUnit;
@@ -113,6 +114,19 @@ trait useUnitArithmetic
         }
 
         return $instance->addDays($diff);
+    }
+
+    public function shiftTimezone(DateTimeZone|string $timezone): static
+    {
+        $instance = $this->castInstance();
+        $oldtimezoneOffset = (int)$instance->format('Z');
+        $instance->setTimezone($timezone);
+        $newtimezoneOffset = (int)$instance->format('Z');
+        $offsetdiff = $newtimezoneOffset - $oldtimezoneOffset;
+        $instance->_modifyUnit('second', $offsetdiff);
+        $instance->setDayOfWeek();
+
+        return $instance;
     }
 
     /**

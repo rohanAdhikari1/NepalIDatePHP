@@ -146,7 +146,7 @@ class NepaliDate implements NepaliDateInterface
     public static function fromTimestamp(int $timestamp, string|DateTimeZone $timezone = 'Asia/Kathmandu'): static
     {
         try {
-            $adDate = new DateTime('@'.$timestamp);
+            $adDate = new DateTime('@' . $timestamp);
             $adDate->setTimezone(static::resolveTimeZone($timezone));
         } catch (\Exception $e) {
             throw new \InvalidArgumentException("Invalid timestamp: $timestamp");
@@ -176,11 +176,6 @@ class NepaliDate implements NepaliDateInterface
         $date->setTime($this->hour, $this->minute, $this->second);
 
         return $date;
-    }
-
-    public function __toString()
-    {
-        return $this->format(NepaliDateInterface::FORMAT_DATETIME_24_FULL);
     }
 
     public function toDateString(): string

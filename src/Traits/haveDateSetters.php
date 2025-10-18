@@ -53,17 +53,7 @@ trait haveDateSetters
             case 'timeZone':
             case 'tZone':
             case 'tZ':
-                if ($value instanceof DateTimeZone) {
-                    $instance->timezone = $value;
-                } elseif (is_string($value)) {
-                    try {
-                        $instance->timezone = new DateTimeZone($value);
-                    } catch (\Exception $e) {
-                        throw new \InvalidArgumentException("Invalid timezone string '$value'.", 0, $e);
-                    }
-                } else {
-                    throw new \InvalidArgumentException('Timezone must be a DateTimeZone instance or a valid timezone string.');
-                }
+                $instance->timezone = $this->resolveTimeZone($value);
                 break;
 
             default:

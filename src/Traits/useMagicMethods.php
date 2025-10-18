@@ -5,9 +5,15 @@ declare(strict_types=1);
 namespace RohanAdhikari\NepaliDate\Traits;
 
 use RohanAdhikari\NepaliDate\Exceptions\NepaliDateExceptions;
+use RohanAdhikari\NepaliDate\NepaliDateInterface;
 
 trait useMagicMethods
 {
+    public function __toString()
+    {
+        return $this->format(NepaliDateInterface::FORMAT_DATETIME_24_FULL);
+    }
+
     public function __call(string $method, array $arguments)
     {
         $name = rtrim($method, 's');

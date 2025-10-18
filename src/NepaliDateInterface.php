@@ -351,6 +351,8 @@ interface NepaliDateInterface
 
     public function shiftToNearWeek(int|NepaliWeekDay $weekday, bool $up = true): static;
 
+    public function shiftTimezone(DateTimeZone|string $timezone): static;
+
     // Boundries
     public function startOfDay(): static;
 
