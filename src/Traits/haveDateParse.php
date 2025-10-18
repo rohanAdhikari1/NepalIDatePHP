@@ -13,6 +13,8 @@ trait haveDateParse
 {
     /** @var string[] Default formats for parsing */
     protected static $defaultFormats = [
+        'Y-m-d',
+        'Y-n-d',
         'Y-m-d H:i:s',
         'Y-m-d h:i:s A',
         'h:i A',

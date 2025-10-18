@@ -332,7 +332,15 @@ Available locales: `en` and `np`.
 
 ---
 
-## Shifting TimeZone
+## Shifting
+
+The `NepaliDate` provides methods to shift dates to their corresponding values based on different contexts like timezone or week.
+
+### TimeZone
+
+//TODO:
+
+### Week
 
 //TODO:
 
@@ -354,8 +362,8 @@ Boundary methods are used to snap a date/time to the start or end of a defined u
 | ----------------------- | ------------------------------------------------------------------------------------------ |
 | startOfDay()            | Sets the time to the very beginning of the day (00:00:00).                                 |
 | endOfDay()              | Sets the time to the very end of the day (23:59:59).                                       |
-| startOfWeek($weekStart) | Moves the date to the first day of the week (Monday by default, customizable).             |
-| endOfWeek($weekEnd)     | Moves the date to the last day of the week (Sunday by default, customizable).              |
+| startOfWeek($weekStart) | Moves the date to the first day of the week (Sunday by default, customizable).             |
+| endOfWeek($weekEnd)     | Moves the date to the last day of the week (Saturday by default, customizable).            |
 | startOfMonth()          | Moves the date to the first day of the month at 00:00:00.                                  |
 | endOfMonth()            | Moves the date to the last day of the month at 23:59:59.                                   |
 | startOfQuarter()        | Moves the date to the first day of the current quarter at 00:00:00.                        |
@@ -378,6 +386,8 @@ Boundary methods are used to snap a date/time to the start or end of a defined u
 **Example:**
 
 ```php
+use RohanAdhikari\NepaliDate\NepaliDate;
+
 $nepaliDate = NepaliDateImmutable::now();
 // end of century
 echo $nepaliDate->endOfCentury(); // auto convert to string using FORMAT_DATETIME_24_FULL
@@ -400,7 +410,75 @@ echo $nepaliDate->endOf(NepaliUnit::Week)->format(NepaliDate::FORMAT_DATETIME_24
 
 ## 🔎 Comparison
 
-// TODO: document eq, gt, lt, between, isToday, etc.
+The `NepaliDate` class provides a comprehensive set of **comparison and state-checking methods**.  
+These methods allow you to compare dates, check if a date falls within a range, or determine its temporal state (past, future, today, etc.).  
+All methods accept either another `NepaliDateInterface` instance or a date string that can be parsed into a Nepali date.
+
+| Method                                   | Alias / Shortcut                           | Description                                                                     |
+| ---------------------------------------- | ------------------------------------------ | ------------------------------------------------------------------------------- |
+| `equalTo($date)`                         | `eq($date)`                                | Returns `true` if the current date is equal to the given date.                  |
+| `notEqualTo($date)`                      | `ne($date)`                                | Returns `true` if the current date is not equal to the given date.              |
+| `greaterThan($date)`                     | `gt($date)`, `isAfter($date)`              | Returns `true` if the current date is after the given date.                     |
+| `greaterThanOrEqualTo($date)`            | `gte($date)`                               | Returns `true` if the current date is after or equal to the given date.         |
+| `lessThan($date)`                        | `lt($date)`, `isBefore($date)`             | Returns `true` if the current date is before the given date.                    |
+| `lessThanOrEqualTo($date)`               | `lte($date)`                               | Returns `true` if the current date is before or equal to the given date.        |
+| `between($date1, $date2, $equal = true)` | `isBetween($date1, $date2, $equal = true)` | Returns `true` if the current date is between two dates (inclusive by default). |
+| `betweenIncluded($date1, $date2)`        | —                                          | Returns `true` if the current date is between two dates, inclusive.             |
+| `betweenExcluded($date1, $date2)`        | —                                          | Returns `true` if the current date is between two dates, exclusive.             |
+| `isWeekday()`                            | —                                          | Returns `true` if the current date is a weekday (not Saturday).                 |
+| `isWeekend()`                            | —                                          | Returns `true` if the current date is a weekend (Saturday).                     |
+| `isYesterday()`                          | —                                          | Returns `true` if the current date represents yesterday.                        |
+| `isToday()`                              | —                                          | Returns `true` if the current date represents today.                            |
+| `isTomorrow()`                           | —                                          | Returns `true` if the current date represents tomorrow.                         |
+| `isFuture()`                             | —                                          | Returns `true` if the current date is in the future.                            |
+| `isPast()`                               | —                                          | Returns `true` if the current date is in the past.                              |
+| `isNowOrFuture()`                        | —                                          | Returns `true` if the current date is now or in the future.                     |
+| `isNowOrPast()`                          | —                                          | Returns `true` if the current date is now or in the past.                       |
+
+**Example:**
+
+```php
+use RohanAdhikari\NepaliDate\NepaliDate;
+
+    //Today Date: 2082-07-01
+    $nepaliDate = NepaliDate::parse('2082-07-02'); //WeekDay: Sunday
+
+    var_dump($nepaliDate->eq('2082-07-02'));
+    // Output: bool(true)
+
+    var_dump($nepaliDate->gt('2082-07-02'));
+    // Output: bool(false)
+
+    var_dump($nepaliDate->gt(NepaliDate::now()));
+    // Output: bool(true)
+
+    var_dump($nepaliDate->lt(NepaliDate::now()));
+    // Output: bool(false)
+
+    var_dump($nepaliDate->between('2082-07-01', '2082-07-03'));
+    // Output: bool(true)
+
+    var_dump($nepaliDate->betweenExcluded('2082-07-01', '2082-07-02'));
+    // Output: bool(false)
+
+    var_dump($nepaliDate->betweenIncluded('2082-07-01', '2082-07-02'));
+    // Output: bool(true)
+
+    var_dump($nepaliDate->isPast());
+    // Output: bool(false)
+
+    // Check if the date is tomorrow
+    var_dump($nepaliDate->isTomorrow());
+    // Output: bool(true)
+
+    // Check if the date is weekday
+    var_dump($nepaliDate->isWeekday());
+    // Output: bool(true)
+
+    // Check if the date is weekend
+    var_dump($nepaliDate->subDays(1)->isWeekend());
+    // Output: bool(true)
+```
 
 ---
 
