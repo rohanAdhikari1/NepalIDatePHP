@@ -370,13 +370,57 @@ $nepaliDate = NepaliDate::createFromFormat('h:i A', '02:45 PM');
 
 ## ➕ Unit Operations (Add/Subtract)
 
-// TODO: document addDays, addMonths, subYears, etc.
+**Available Methods**
+
+| Unit   | Add Method       | Subtract Method  |
+| ------ | ---------------- | ---------------- |
+| Year   | `addYear()`      | `subYear()`      |
+| Year   | `addYears($n)`   | `subYears($n)`   |
+| Month  | `addMonth()`     | `subMonth()`     |
+| Month  | `addMonths($n)`  | `subMonths($n)`  |
+| Day    | `addDay()`       | `subDay()`       |
+| Day    | `addDays($n)`    | `subDays($n)`    |
+| Hour   | `addHour()`      | `subHour()`      |
+| Hour   | `addHours($n)`   | `subHours($n)`   |
+| Minute | `addMinute()`    | `subMinute()`    |
+| Minute | `addMinutes($n)` | `subMinutes($n)` |
+| Second | `addSecond()`    | `subSecond()`    |
+| Second | `addSeconds($n)` | `subSeconds($n)` |
+
+**Example**
+
+```php
+use RohanAdhikari\NepaliDate\NepaliDate;
+
+    $nepalidate = NepaliDate::now(); //Today: 2082-07-01
+    $nepalidate->addYear();
+    echo $nepalidate;
+    //Example Output: 2083-07-01 13:48:02
+    $nepalidate->subMinute();
+    echo $nepalidate;
+    //Example Output: 2083-07-01 13:48:15
+    $nepalidate->subDays(5);
+    echo $nepalidate;
+    //Example Output: 2083-06-27 13:48:49
+    $nepalidate->addDays(10);
+    echo $nepalidate;
+    //Example Output: 2083-07-07 13:50:25
+
+    //or also you use
+    $nepalidate->modifyUnit(NepaliUnit::Month, 2);
+    echo $nepalidate;
+    //Example Output: 2083-08-27 13:49:24
+    $nepalidate->modifyUnit(NepaliUnit::Month, -3);
+    echo $nepalidate;
+    //Example Output: 2083-05-27 13:49:53
+
+```
 
 ---
 
 ## Dates Difference
 
-// TODO: document addDays, addMonths, subYears, etc.
+// TODO:
 
 ---
 
