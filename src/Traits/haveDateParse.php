@@ -100,10 +100,10 @@ trait haveDateParse
         );
 
         // Convert arrays to regex patterns
-        $monthsFullPattern = '(?:'.implode('|', array_map('preg_quote', $monthsFull)).')';
-        $monthsShortPattern = '(?:'.implode('|', array_map('preg_quote', $monthsShort)).')';
-        $daysFullPattern = '(?:'.implode('|', array_map('preg_quote', $daysFull)).')';
-        $daysShortPattern = '(?:'.implode('|', array_map('preg_quote', $daysShort)).')';
+        $monthsFullPattern = '(?:' . implode('|', array_map('preg_quote', $monthsFull)) . ')';
+        $monthsShortPattern = '(?:' . implode('|', array_map('preg_quote', $monthsShort)) . ')';
+        $daysFullPattern = '(?:' . implode('|', array_map('preg_quote', $daysFull)) . ')';
+        $daysShortPattern = '(?:' . implode('|', array_map('preg_quote', $daysShort)) . ')';
         $replacements = [
             // Year
             'Y' => '(?P<year>\d{4})',
@@ -151,7 +151,7 @@ trait haveDateParse
         ];
         $regex = strtr($format, $replacements);
 
-        return '/^'.$regex.'$/iu';
+        return '/^' . $regex . '$/iu';
     }
 
     protected static function parseFromRegex(string $regex, string $date): ?static
@@ -162,7 +162,7 @@ trait haveDateParse
         }
         $dateMap = array_filter(
             $matches,
-            fn ($key) => ! is_int($key),
+            fn($key) => ! is_int($key),
             ARRAY_FILTER_USE_KEY
         );
         if (empty($dateMap)) {
@@ -178,7 +178,7 @@ trait haveDateParse
 
         // --- YEAR ---
         if (isset($dateMap['year_short'])) {
-            $year = (int) substr((string) $now->year, 0, 2).$dateMap['year_short'];
+            $year = (int) substr((string) $now->year, 0, 2) . $dateMap['year_short'];
         }
         if (isset($dateMap['year'])) {
             $year = (int) $dateMap['year'];
@@ -266,13 +266,21 @@ trait haveDateParse
                 return new DateTimeZone('Asia/Kathmandu');
             }
         }
+
+        $offsetToZone = function (int $hours, int $minutes, int $sign) {
+            $offsetSeconds = $sign * ($hours * 3600 + $minutes * 60);
+            $tzName = timezone_name_from_abbr('', $offsetSeconds, 0);
+
+            return new DateTimeZone($tzName ?: 'Asia/Kathmandu');
+        };
+
         if (isset($matches['timezone_offset'])) {
             $offset = $matches['timezone_offset'];
             $sign = ($offset[0] === '-') ? -1 : 1;
             $hours = (int) substr($offset, 1, 2);
             $minutes = (int) substr($offset, 3, 2);
 
-            return new DateTimeZone(sprintf('UTC%s%02d:%02d', $sign < 0 ? '-' : '+', $hours, $minutes));
+            return $offsetToZone($hours, $minutes, $sign);
         }
 
         if (isset($matches['timezone_offset_colon'])) {
@@ -280,17 +288,17 @@ trait haveDateParse
             $sign = ($offset[0] === '-') ? -1 : 1;
             [$hours, $minutes] = explode(':', substr($offset, 1));
 
-            return new DateTimeZone(sprintf('UTC%s%02d:%02d', $sign < 0 ? '-' : '+', $hours, $minutes));
+            return $offsetToZone((int) $hours, (int) $minutes, $sign);
         }
 
         if (! empty($matches['timezone_seconds'])) {
             $seconds = (int) $matches['timezone_seconds'];
-            $sign = $seconds < 0 ? '-' : '+';
+            $sign = $seconds < 0 ? -1 : 1;
             $seconds = abs($seconds);
             $hours = floor($seconds / 3600);
             $minutes = ($seconds % 3600) / 60;
 
-            return new DateTimeZone(sprintf('UTC%s%02d:%02d', $sign, $hours, $minutes));
+            return $offsetToZone((int)$hours, (int)$minutes, $sign);
         }
 
         return new DateTimeZone('Asia/Kathmandu');

@@ -1,5 +1,8 @@
 # NepaliDate
 
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/rohanadhikari/nepali-date.svg?style=flat-square)](https://packagist.org/packages/rohanadhikari/nepali-date)
+[![Total Downloads](https://img.shields.io/packagist/dt/rohanadhikari/nepali-date.svg?style=flat-square)](https://packagist.org/packages/rohanadhikari/nepali-date)
+
 A PHP package for handling **Nepali Date and Time (Bikram Sambat - BS)** with full support for localization, date manipulation, and formatting. All calculations are based on the **Nepali calendar**, making it perfect for applications targeting Nepali users or systems that operate primarily in BS.
 
 ---
@@ -7,7 +10,7 @@ A PHP package for handling **Nepali Date and Time (Bikram Sambat - BS)** with fu
 ## 🚀 Features
 
 - 🕒 Works in **Nepali (BS) date and time**
-- 🗓 Simple function to **convert between AD & BS**
+- 🗓 Simple functions to **convert between AD & BS**
 - 🔁 Support for **mutable** and **immutable** date handling
 - ➕ Add or subtract days, months, and years in BS
 - 📅 Get current Nepali date and time
@@ -96,8 +99,8 @@ echo $fromAd->format(NepaliDate::FORMAT_DATE_YMD);
 
 Notes:
 
-- Make sure `vendor/autoload.php` path is correct relative to your script.
-- Composer is the recommended way to load the package. If you don't use Composer you would need to include the package files manually (not recommended).
+- Make sure the path to `vendor/autoload.php` is correct relative to your script.
+- Composer is the recommended way to load the package. If you don't use Composer you need to include the package files manually (not recommended).
 
 ---
 

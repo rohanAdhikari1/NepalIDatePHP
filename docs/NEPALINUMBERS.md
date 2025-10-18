@@ -62,7 +62,7 @@ Example:
 use RohanAdhikari\NepaliDate\NepaliNumbers;
 NepaliNumbers::getNepaliCurrency(123456); // 'रू १,२३,४५६'
 NepaliNumbers::getNepaliCurrency(123456, 'Rs', only:true); // 'Rs १,२३,४५६ मात्र'
-NepaliNumbers::getNepaliCurrency(123456, fromat:false); // 'रू १२३४५६'
+NepaliNumbers::getNepaliCurrency(123456, format:false); // 'रू १२३४५६'
 
 ```
 

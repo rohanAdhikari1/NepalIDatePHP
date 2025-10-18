@@ -78,9 +78,9 @@ NepaliDateTime::customizeLocaleShortWeekDays(NepaliDate::NEPALI,[
 
 ### Customizing All Locale Data at Once
 
-You can also customize multiple or all locale fields together by passing an associative array to `customizeocale` function.
+You can also customize multiple or all locale fields together by passing an associative array to the `customizeLocale` function.
 
-`NepaliDateTime::customizeocale(string $locale,array $data)`
+`NepaliDateTime::customizeLocale(string $locale, array $data)`
 
 ```php
 use RohanAdhikari\NepaliDate\NepaliDate;
