@@ -17,6 +17,7 @@ use RohanAdhikari\NepaliDate\Traits\haveDateSetters;
 use RohanAdhikari\NepaliDate\Traits\haveImmutable;
 use RohanAdhikari\NepaliDate\Traits\useBoundaries;
 use RohanAdhikari\NepaliDate\Traits\useComparison;
+use RohanAdhikari\NepaliDate\Traits\useDifference;
 use RohanAdhikari\NepaliDate\Traits\useLocale;
 use RohanAdhikari\NepaliDate\Traits\useMacro;
 use RohanAdhikari\NepaliDate\Traits\useMagicMethods;
@@ -40,7 +41,7 @@ class NepaliDate implements NepaliDateInterface
     use haveDateGetters, haveDateSetters, haveImmutable;
     use haveDateParse;
     use useBoundaries;
-    use useComparison;
+    use useComparison, useDifference;
     use useLocale, useMacro;
     use useMagicMethods;
     use useOverFlowBounds;

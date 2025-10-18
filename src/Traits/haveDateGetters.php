@@ -288,7 +288,7 @@ trait haveDateGetters
 
     protected function handleDynamicGet(string $name): mixed
     {
-        $method = 'get' . ucfirst($name);
+        $method = 'get'.ucfirst($name);
         if (method_exists($this, $method)) {
             return $this->$method();
         }

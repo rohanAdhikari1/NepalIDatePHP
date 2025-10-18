@@ -420,7 +420,14 @@ use RohanAdhikari\NepaliDate\NepaliDate;
 
 ## Dates Difference
 
-// TODO:
+Currently this difference feature is avialable for english only as currently it just convert date into AdDate and return builtin DateInterval instance. But these feature will be avialble in future version.
+**Example:**
+
+```php
+    $date1 = NepaliDate::now();
+    $date2 = NepaliDate::now()->addDays(50);
+    $date1->diff($date2); //will return php built in DateInterval.
+```
 
 ---
 
