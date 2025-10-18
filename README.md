@@ -291,6 +291,9 @@ Available locales: `en` and `np`.
 
     echo $date->format(NepaliDate::FORMAT_DATETIME_24);
     //Example Output: २०८२-०६-३१ २१:३४
+
+    //for reset
+    $date->resetLocale();
 ```
 
 > [!Note]
@@ -305,6 +308,63 @@ Available locales: `en` and `np`.
 ---
 
 ## Parse
+
+The `NepaliDate` class provides the `parse()` method, which allows you to create a NepaliDate instance from a string. It supports multiple default format patterns, and you can also add custom parse patterns to handle other string formats or use [`createFromFormat`](#Createfromformat).
+
+**Default format patterns supported for parsing:**
+
+| Format Pattern    |
+| ----------------- |
+| `Y-m-d`           |
+| `Y-n-d`           |
+| `Y-m-d H:i:s`     |
+| `Y-m-d h:i:s A`   |
+| `h:i A`           |
+| `h:i:s A`         |
+| `H:i`             |
+| `H:i:s`           |
+| `U`               |
+| `c`               |
+| `r`               |
+| `D, d M Y H:i:s`  |
+| `l, F j, Y g:i A` |
+
+**Example:**
+
+```php
+    use RohanAdhikari\NepaliDate\NepaliDate;
+
+    $nepalidate = NepaliDate::parse('2080-06-02');
+
+    $nepalidate = NepaliDate::parse('2080-6-02');
+
+    $nepalidate = NepaliDate::parse('13:12');
+
+    //adding new custom parse pattern
+    NepaliDate::addDefaultParserFormat('j F, Y');
+    NepaliDate::parse('1 Kartik, 2082');
+
+    //also can add multple custom parse format at once
+    NepaliDate::addDefaultParserFormats(['j F, Y', 'j M, Y']);
+```
+
+---
+
+## CreateFromFormat
+
+The `NepaliDate` class provides the `createFromFormat()` method, which allows you to create a NepaliDate instance from a string using a specific format.
+
+**Example:**
+
+```php
+use RohanAdhikari\NepaliDate\NepaliDate;
+
+$nepaliDate = NepaliDate::createFromFormat('j F, Y', '1 Kartik, 2082');
+
+$nepaliDate = NepaliDate::createFromFormat('Y-m-d H:i:s', '2080-07-01 14:30:00');
+
+$nepaliDate = NepaliDate::createFromFormat('h:i A', '02:45 PM');
+```
 
 ---
 
@@ -338,7 +398,21 @@ The `NepaliDate` provides methods to shift dates to their corresponding values b
 
 ### TimeZone
 
-//TODO:
+```php
+use RohanAdhikari\NepaliDate\NepaliDate;
+
+    // current timezone: Asia/Kathmandu
+    $nepaliDate = NepaliDate::now();
+    echo $nepaliDate->format(NepaliDate::FORMAT_ISO_8601);
+    //Exmaple Output: 2082-07-01T11:41:22+05:45
+
+    //shift timezone to Autralia
+    $nepaliDate->shiftTimezone('Australia/Melbourne');
+    echo $nepaliDate->format(NepaliDate::FORMAT_ISO_8601);
+    //Example Output: 2082-07-01T16:56:22+11:00
+```
+
+---
 
 ### Week
 
