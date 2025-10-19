@@ -9,6 +9,13 @@
             "Tests\\": "tests/"
         }
     },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "RohanAdhikari\\NepaliDate\\Laravel\\ServiceProvider"
+            ]
+        }
+    },
     "authors": [
         {
             "name": "Rohan Adhikari",
