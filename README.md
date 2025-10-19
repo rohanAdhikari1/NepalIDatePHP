@@ -2,7 +2,7 @@
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/rohanadhikari/nepali-date.svg?style=flat-square)](https://packagist.org/packages/rohanadhikari/nepali-date)
 
-<!-- [![Total Downloads](https://img.shields.io/packagist/dt/rohanadhikari/nepali-date.svg?style=flat-square)](https://packagist.org/packages/rohanadhikari/nepali-date) -->
+[![Total Downloads](https://img.shields.io/packagist/dt/rohanadhikari/nepali-date.svg?style=flat-square)](https://packagist.org/packages/rohanadhikari/nepali-date)
 
 A PHP package for handling **Nepali Date and Time (Bikram Sambat - BS)** with full support for localization, date manipulation, and formatting. All calculations are based on the **Nepali calendar**, making it perfect for applications targeting Nepali users or systems that operate primarily in BS.
 
@@ -424,7 +424,7 @@ use RohanAdhikari\NepaliDate\NepaliDate;
 
 ## Dates Difference
 
-Currently this difference feature is avialable for english only as currently it just convert date into AdDate and return builtin DateInterval instance. But these feature will be avialble in future version.
+Currently this difference feature is avialable for english only as it just convert date into AdDate and return builtin DateInterval instance. But feature for nepali locale will be avialble in future version.
 **Example:**
 
 ```php
@@ -796,6 +796,8 @@ use RohanAdhikari\NepaliDate\NepaliDate;
 
 For detailed instructions on using **NepaliDate** in a Laravel application, see the [Laravel Integration Guide](./docs/LARAVEL.md).
 
+---
+
 ### 🌐 Locale Customization
 
 You can customize locale data for months, weekdays, numbers, and more.  
@@ -814,6 +816,8 @@ For detailed instructions, see the [Macro](./docs/MACRO.md) documentation.
 
 You can also use the `NepaliNumbers` class to work with Nepali numerals.
 For detailed information, see the [NepaliNumbers](./docs/NEPALINUMBERS.md) documentation.
+
+---
 
 <!-- ### Calendar
 
