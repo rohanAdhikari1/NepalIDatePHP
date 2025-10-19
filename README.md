@@ -1,7 +1,6 @@
 # NepaliDate
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/rohanadhikari/nepali-date.svg?style=flat-square)](https://packagist.org/packages/rohanadhikari/nepali-date)
-
 [![Total Downloads](https://img.shields.io/packagist/dt/rohanadhikari/nepali-date.svg?style=flat-square)](https://packagist.org/packages/rohanadhikari/nepali-date)
 
 A PHP package for handling **Nepali Date and Time (Bikram Sambat - BS)** with full support for localization, date manipulation, and formatting. All calculations are based on the **Nepali calendar**, making it perfect for applications targeting Nepali users or systems that operate primarily in BS.

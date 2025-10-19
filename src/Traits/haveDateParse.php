@@ -8,6 +8,7 @@ use DateTimeZone;
 use Exception;
 use RohanAdhikari\NepaliDate\Exceptions\NepaliDateFormatException;
 use RohanAdhikari\NepaliDate\NepaliDateInterface;
+use RohanAdhikari\NepaliDate\NepaliNumbers;
 
 trait haveDateParse
 {
@@ -156,7 +157,7 @@ trait haveDateParse
 
     protected static function parseFromRegex(string $regex, string $date): ?static
     {
-        $filterdate = $date;
+        $filterdate = NepaliNumbers::convertToEnglish($date);
         if (! preg_match($regex, $filterdate, $matches)) {
             return null;
         }
