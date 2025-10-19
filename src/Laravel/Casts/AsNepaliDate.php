@@ -8,6 +8,7 @@ use RohanAdhikari\NepaliDate\NepaliDate;
 class AsNepaliDate implements \Illuminate\Contracts\Database\Eloquent\CastsAttributes
 {
     protected $format = 'c';
+
     /**
      * Cast the given value.
      *

@@ -792,7 +792,7 @@ use RohanAdhikari\NepaliDate\NepaliDate;
 
 ## Additional
 
-## Usage in Laravel Example
+### Usage in Laravel Example
 
 For detailed instructions on using **NepaliDate** in a Laravel application, see the [Laravel Integration Guide](./docs/LARAVEL.md).
 

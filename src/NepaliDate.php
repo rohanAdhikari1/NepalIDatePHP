@@ -17,6 +17,7 @@ use RohanAdhikari\NepaliDate\Traits\haveDateSetters;
 use RohanAdhikari\NepaliDate\Traits\haveImmutable;
 use RohanAdhikari\NepaliDate\Traits\useBoundaries;
 use RohanAdhikari\NepaliDate\Traits\useComparison;
+use RohanAdhikari\NepaliDate\Traits\useDefaultTimeZone;
 use RohanAdhikari\NepaliDate\Traits\useDifference;
 use RohanAdhikari\NepaliDate\Traits\useLocale;
 use RohanAdhikari\NepaliDate\Traits\useMacro;
@@ -42,6 +43,7 @@ class NepaliDate implements NepaliDateInterface
     use haveDateParse;
     use useBoundaries;
     use useComparison, useDifference;
+    use useDefaultTimeZone;
     use useLocale, useMacro;
     use useMagicMethods;
     use useOverFlowBounds;
@@ -70,7 +72,7 @@ class NepaliDate implements NepaliDateInterface
         int $hour = 0,
         int $minute = 0,
         int $second = 0,
-        string|DateTimeZone $timezone = 'Asia/Kathmandu'
+        string|DateTimeZone|null $timezone = null
     ) {
         $this->year = $year;
         $this->month = $month;
@@ -97,7 +99,7 @@ class NepaliDate implements NepaliDateInterface
     protected static function resolveTimeZone(DateTimeZone|string|null $timezone): DateTimeZone
     {
         if (! $timezone) {
-            $timezone = 'Asia/Kathmandu';
+            $timezone = static::getDefaultTimeZoneName();
         }
         if ($timezone instanceof DateTimeZone) {
             return $timezone;
@@ -133,7 +135,7 @@ class NepaliDate implements NepaliDateInterface
         return new static($year, $month, $day, $hour, $minute, $second, $timezone);
     }
 
-    public static function fromNotation(string $notation, string|DateTimeZone $timezone = 'Asia/Kathmandu'): static
+    public static function fromNotation(string $notation, string|DateTimeZone|null $timezone = null): static
     {
         try {
             $adDate = new DateTime($notation, static::resolveTimeZone($timezone));
@@ -144,10 +146,10 @@ class NepaliDate implements NepaliDateInterface
         return static::fromAd($adDate);
     }
 
-    public static function fromTimestamp(int $timestamp, string|DateTimeZone $timezone = 'Asia/Kathmandu'): static
+    public static function fromTimestamp(int $timestamp, string|DateTimeZone|null $timezone = null): static
     {
         try {
-            $adDate = new DateTime('@'.$timestamp);
+            $adDate = new DateTime('@' . $timestamp);
             $adDate->setTimezone(static::resolveTimeZone($timezone));
         } catch (\Exception $e) {
             throw new \InvalidArgumentException("Invalid timestamp: $timestamp");
@@ -156,7 +158,7 @@ class NepaliDate implements NepaliDateInterface
         return static::fromAd($adDate);
     }
 
-    public static function now(string|DateTimeZone $timezone = 'Asia/Kathmandu'): static
+    public static function now(string|DateTimeZone|null $timezone = null): static
     {
         $adDate = new DateTime('now', static::resolveTimeZone($timezone));
 

@@ -23,9 +23,10 @@ class Post extends Model
 ```
 
 2. Storing in BS(Nepali) Date
-   > [!Warning]
-   > When storing BS dates, avoid using `date` or `datetime` column types in your database schema.
-   > `string` is recommended for accuracy.
+
+> [!Warning]
+> When storing BS dates, avoid using `date` or `datetime` column types in your database schema.
+> `string` is recommended for accuracy.
 
 ```php
 use RohanAdhikari\NepaliDate\Laravel\Casts\AsNepaliDate;

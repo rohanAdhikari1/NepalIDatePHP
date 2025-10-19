@@ -224,6 +224,13 @@ interface NepaliDateInterface
 
     public function format(string $format): string;
 
+    // default timezone
+    public static function getDefaultTimeZoneName(): string;
+
+    public static function setDefaultTimeZoneName(string $timezone): void;
+
+    public static function resetTimeZone(): void;
+
     // parse
     public static function addDefaultParserFormats(array $formats): void;
 
