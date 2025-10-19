@@ -16,6 +16,9 @@ class AsNepaliDate implements \Illuminate\Contracts\Database\Eloquent\CastsAttri
      */
     public function get(Model $model, string $key, mixed $value, array $attributes): mixed
     {
+        if (blank($value)) {
+            return null;
+        }
         return NepaliDate::createFromFormat($this->format, $value);
     }
 
@@ -26,6 +29,9 @@ class AsNepaliDate implements \Illuminate\Contracts\Database\Eloquent\CastsAttri
      */
     public function set(Model $model, string $key, mixed $value, array $attributes): mixed
     {
+        if (blank($value)) {
+            return null;
+        }
         return NepaliDate::parse($value)->locale(NepaliDate::ENGLISH)->format($this->format);
     }
 }

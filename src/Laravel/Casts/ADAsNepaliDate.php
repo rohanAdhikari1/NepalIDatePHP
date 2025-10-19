@@ -16,6 +16,9 @@ class ADAsNepaliDate implements \Illuminate\Contracts\Database\Eloquent\CastsAtt
      */
     public function get(Model $model, string $key, mixed $value, array $attributes): mixed
     {
+        if (blank($value)) {
+            return null;
+        }
         return NepaliDate::fromNotation($value);
     }
 
@@ -26,6 +29,9 @@ class ADAsNepaliDate implements \Illuminate\Contracts\Database\Eloquent\CastsAtt
      */
     public function set(Model $model, string $key, mixed $value, array $attributes): mixed
     {
+        if (blank($value)) {
+            return null;
+        }
         return NepaliDate::parse($value)->toAd()->format($this->format);
     }
 }
