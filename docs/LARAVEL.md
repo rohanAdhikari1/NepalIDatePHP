@@ -47,7 +47,7 @@ You can now use NepaliDate attributes in your controllers or views:
 
 ```php
 $post = Post::firstOrcreate([
-        'published_at' => '2082-07-06',
+        'published_at' => NepaliDate::now(),
         'published_date' => '2082-07-08',
     ], [
         'title' => 'check 1',
