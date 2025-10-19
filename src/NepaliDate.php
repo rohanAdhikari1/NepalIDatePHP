@@ -149,7 +149,7 @@ class NepaliDate implements NepaliDateInterface
     public static function fromTimestamp(int $timestamp, string|DateTimeZone|null $timezone = null): static
     {
         try {
-            $adDate = new DateTime('@'.$timestamp);
+            $adDate = new DateTime('@' . $timestamp);
             $adDate->setTimezone(static::resolveTimeZone($timezone));
         } catch (\Exception $e) {
             throw new \InvalidArgumentException("Invalid timestamp: $timestamp");
