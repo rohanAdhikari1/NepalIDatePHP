@@ -1,6 +1,6 @@
 {
     "name": "rohanadhikari/nepali-date",
-    "description": "A package for managing NepaliDate and Time.",
+    "description": "A PHP package for handling Nepali Date and Time (Bikram Sambat - BS).",
     "type": "library",
     "license": "MIT",
     "autoload": {
