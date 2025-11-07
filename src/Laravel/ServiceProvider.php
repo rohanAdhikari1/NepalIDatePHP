@@ -23,5 +23,10 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     {
         $timezone = config('app.timezone', 'Asia/Kathmandu');
         NepaliDate::setDefaultTimeZoneName($timezone);
+        if (class_exists(\Carbon\Carbon::class)) {
+            \Carbon\Carbon::macro('toNepaliDate', function (): string {
+                return NepaliDate::fromAd($this->toDateTimeString());
+            });
+        }
     }
 }
