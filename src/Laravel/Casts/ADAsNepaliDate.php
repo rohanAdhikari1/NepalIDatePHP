@@ -32,6 +32,9 @@ class ADAsNepaliDate implements \Illuminate\Contracts\Database\Eloquent\CastsAtt
         if (blank($value)) {
             return null;
         }
-        return NepaliDate::parse($value)->toAd()->format($this->format);
+        if ($value instanceof NepaliDate) {
+            return $value->toAd()->format($this->format);
+        }
+        return $value;
     }
 }
