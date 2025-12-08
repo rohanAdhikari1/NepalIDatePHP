@@ -7,7 +7,12 @@ use RohanAdhikari\NepaliDate\NepaliDate;
 
 class ADAsNepaliDate implements \Illuminate\Contracts\Database\Eloquent\CastsAttributes
 {
-    protected $format = 'c';
+    protected $format;
+
+    public function __construct($format = 'Y-m-d')
+    {
+        $this->format = $format;
+    }
 
     /**
      * Cast the given value.

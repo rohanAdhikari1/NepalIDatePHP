@@ -5,11 +5,11 @@ namespace RohanAdhikari\NepaliDate\Laravel\Casts;
 use Illuminate\Database\Eloquent\Model;
 use RohanAdhikari\NepaliDate\NepaliDate;
 
-class AsNepaliDate implements \Illuminate\Contracts\Database\Eloquent\CastsAttributes
+class AsNepaliDateTime implements \Illuminate\Contracts\Database\Eloquent\CastsAttributes
 {
     protected $format;
 
-    public function __construct($format = 'Y-m-d')
+    public function __construct($format = 'c')
     {
         $this->format = $format;
     }

@@ -5,11 +5,11 @@ namespace RohanAdhikari\NepaliDate\Laravel\Casts;
 use Illuminate\Database\Eloquent\Model;
 use RohanAdhikari\NepaliDate\NepaliDate;
 
-class AsNepaliDate implements \Illuminate\Contracts\Database\Eloquent\CastsAttributes
+class ADAsNepaliDateTime implements \Illuminate\Contracts\Database\Eloquent\CastsAttributes
 {
     protected $format;
 
-    public function __construct($format = 'Y-m-d')
+    public function __construct($format = 'c')
     {
         $this->format = $format;
     }
@@ -24,7 +24,7 @@ class AsNepaliDate implements \Illuminate\Contracts\Database\Eloquent\CastsAttri
         if (blank($value)) {
             return null;
         }
-        return NepaliDate::createFromFormat($this->format, $value);
+        return NepaliDate::fromNotation($value);
     }
 
     /**
@@ -37,6 +37,9 @@ class AsNepaliDate implements \Illuminate\Contracts\Database\Eloquent\CastsAttri
         if (blank($value)) {
             return null;
         }
-        return NepaliDate::parse($value)->locale(NepaliDate::ENGLISH)->format($this->format);
+        if ($value instanceof NepaliDate) {
+            return $value->toAd()->format($this->format);
+        }
+        return $value;
     }
 }
