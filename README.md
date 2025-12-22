@@ -7,6 +7,11 @@ A PHP package for handling **Nepali Date and Time (Bikram Sambat - BS)** with fu
 
 ---
 
+> [!NOTE]  
+> v1-beta is optimized for fast date conversions by minimizing computational overhead. Additional optimization steps are planned. You can try v1-beta and share your feedback to help improve it.
+
+---
+
 ## 🚀 Features
 
 - 🕒 Works in **Nepali (BS) date and time**
