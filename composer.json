@@ -29,8 +29,7 @@
     "scripts": {
         "analyse":"vendor/bin/phpstan analyse",
         "format": "vendor/bin/pint",
-        "test" : "vendor/bin/pest --colors=always",
-        "time:check": "php check/ConvertPerformanceMeasure.php"
+        "test" : "vendor/bin/pest --colors=always"
     },
     "minimum-stability": "stable",
     "require-dev": {
