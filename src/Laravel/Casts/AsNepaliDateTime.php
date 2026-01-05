@@ -24,6 +24,7 @@ class AsNepaliDateTime implements \Illuminate\Contracts\Database\Eloquent\CastsA
         if (blank($value)) {
             return null;
         }
+
         return NepaliDate::createFromFormat($this->format, $value);
     }
 
@@ -37,6 +38,7 @@ class AsNepaliDateTime implements \Illuminate\Contracts\Database\Eloquent\CastsA
         if (blank($value)) {
             return null;
         }
+
         return NepaliDate::parse($value)->locale(NepaliDate::ENGLISH)->format($this->format);
     }
 }

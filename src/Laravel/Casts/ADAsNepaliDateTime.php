@@ -24,6 +24,7 @@ class ADAsNepaliDateTime implements \Illuminate\Contracts\Database\Eloquent\Cast
         if (blank($value)) {
             return null;
         }
+
         return NepaliDate::fromNotation($value);
     }
 
@@ -40,6 +41,7 @@ class ADAsNepaliDateTime implements \Illuminate\Contracts\Database\Eloquent\Cast
         if ($value instanceof NepaliDate) {
             return $value->toAd()->format($this->format);
         }
+
         return $value;
     }
 }

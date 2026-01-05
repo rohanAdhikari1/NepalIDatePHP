@@ -221,8 +221,8 @@ Formats the `NepaliDate` instance according to the provided pattern and locale-s
 | ------ | ------------------------------- | --------------------------------------- |
 | Y      | 2082                            | Year                                    |
 | y      | 82                              | Two-digit year                          |
-| m      | 2                               | Month (1–12)                            |
-| n      | 02                              | Month, two digits                       |
+| n      | 2                               | Month (1–12)                            |
+| m      | 02                              | Month, two digits                       |
 | M      | Bai                             | Short month name                        |
 | F      | Baisakh                         | Full month name                         |
 | d      | 09                              | Two-digit day                           |

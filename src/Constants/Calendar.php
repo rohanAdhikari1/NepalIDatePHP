@@ -262,29 +262,31 @@ final class Calendar
         for ($i = $fromYear; $i < $year; $i++) {
             $totalDays += array_sum(self::NEPALI_DATES[$i]);
         }
+
         return $totalDays;
     }
 
     public static function getTotalBSDaysFromBase(int $year): int
     {
-        return static::getTotalBSDaysFromYear($year, self::BASE_YEAR_BS);
+        return self::getTotalBSDaysFromYear($year, self::BASE_YEAR_BS);
     }
 
     public static function getTotalBSDaysFromAnchor(int $year, int $anchorYear, int $anchorTotalDays): int
     {
         $totalDays = $anchorTotalDays;
         if ($year >= $anchorYear) {
-            $totalDays += static::getTotalBSDaysFromYear($year, $anchorYear);
+            $totalDays += self::getTotalBSDaysFromYear($year, $anchorYear);
         } else {
-            $totalDays -= static::getTotalBSDaysFromYear($anchorYear, $year);
+            $totalDays -= self::getTotalBSDaysFromYear($anchorYear, $year);
         }
+
         return $totalDays;
     }
 
     private static function findNearestAnchor(int $year): ?array
     {
         $nearest = null;
-        $minDiff = static::END_YEAR_BS;
+        $minDiff = self::END_YEAR_BS;
         foreach (self::KNOWN_ANCHORS as $anchorYear => $anchorDays) {
             $diff = abs($year - $anchorYear);
             if ($diff < $minDiff) {
@@ -295,20 +297,23 @@ final class Calendar
                 ];
             }
         }
+
         return $nearest;
     }
 
     public static function getTotalBSDaysInYear(int $year): ?int
     {
-        $anchor = static::findNearestAnchor($year);
-        return $anchor ? static::getTotalBSDaysFromAnchor($year, $anchor['year'], $anchor['days']) : null;
+        $anchor = self::findNearestAnchor($year);
+
+        return $anchor ? self::getTotalBSDaysFromAnchor($year, $anchor['year'], $anchor['days']) : null;
     }
 
     public static function getTotalBSDays(int $year, int $month, int $day): int
     {
-        $totalDays = static::getTotalBSDaysInYear($year) ?? static::getTotalBSDaysFromBase($year);
+        $totalDays = self::getTotalBSDaysInYear($year) ?? self::getTotalBSDaysFromBase($year);
         $totalDays += array_sum(array_slice(self::NEPALI_DATES[$year], 0, $month - 1));
         $totalDays += $day;
+
         return $totalDays;
     }
 
