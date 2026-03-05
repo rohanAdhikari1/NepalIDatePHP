@@ -165,6 +165,26 @@ class NepaliDate implements NepaliDateInterface
         return static::fromAd($adDate);
     }
 
+    public static function monthName($monthIndex, $locale = null): string
+    {
+        return static::getLocaleValueFor('months', $monthIndex, $locale ?? self::$globalDefaultLocale);
+    }
+
+    public static function shortMonthName($monthIndex, $locale = null): string
+    {
+        return static::getLocaleValueFor('shortMonths', $monthIndex, $locale ?? self::$globalDefaultLocale);
+    }
+
+    public static function weekName($weekIndex, $locale = null): string
+    {
+        return static::getLocaleValueFor('weekdays', $weekIndex, $locale ?? self::$globalDefaultLocale);
+    }
+
+    public static function shortWeekName($weekIndex, $locale = null): string
+    {
+        return static::getLocaleValueFor('shortWeekdays', $weekIndex, $locale ?? self::$globalDefaultLocale);
+    }
+
     public function toAd(): DateTimeInterface
     {
         [$year, $month, $day] = static::BStoAD($this->year, $this->month, $this->day);
