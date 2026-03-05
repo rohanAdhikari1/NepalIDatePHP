@@ -210,6 +210,22 @@ interface NepaliDateInterface
 
     public static function now(string $timezone = 'Asia/Kathmandu'): static;
 
+    public static function monthName($monthIndex, $locale = null): string;
+
+    public static function shortMonthName($monthIndex, $locale = null): string;
+
+    public static function weekName($weekIndex, $locale = null): string;
+
+    public static function shortWeekName($weekIndex, $locale = null): string;
+
+    public static function getMonths($locale = null): array;
+
+    public static function getShortMonths($locale = null): array;
+
+    public static function getWeekDays($locale = null): array;
+
+    public static function getShortWeekDays($locale = null): array;
+
     public static function fromTimestamp(int $timestamp, string $timezone = 'Asia/Kathmandu'): static;
 
     public function __toString();
