@@ -149,7 +149,7 @@ class NepaliDate implements NepaliDateInterface
     public static function fromTimestamp(int $timestamp, string|DateTimeZone|null $timezone = null): static
     {
         try {
-            $adDate = new DateTime('@'.$timestamp);
+            $adDate = new DateTime('@' . $timestamp);
             $adDate->setTimezone(static::resolveTimeZone($timezone));
         } catch (\Exception $e) {
             throw new \InvalidArgumentException("Invalid timestamp: $timestamp");
@@ -163,6 +163,26 @@ class NepaliDate implements NepaliDateInterface
         $adDate = new DateTime('now', static::resolveTimeZone($timezone));
 
         return static::fromAd($adDate);
+    }
+
+    public static function monthName($monthIndex, $locale = null): string
+    {
+        return static::getLocaleValueFor('months', $monthIndex, $locale ?? self::$globalDefaultLocale);
+    }
+
+    public static function shortMonthName($monthIndex, $locale = null): string
+    {
+        return static::getLocaleValueFor('shortMonths', $monthIndex, $locale ?? self::$globalDefaultLocale);
+    }
+
+    public static function weekName($weekIndex, $locale = null): string
+    {
+        return static::getLocaleValueFor('weekdays', $weekIndex, $locale ?? self::$globalDefaultLocale);
+    }
+
+    public static function shortWeekName($weekIndex, $locale = null): string
+    {
+        return static::getLocaleValueFor('shortWeekdays', $weekIndex, $locale ?? self::$globalDefaultLocale);
     }
 
     public function toAd(): DateTimeInterface
