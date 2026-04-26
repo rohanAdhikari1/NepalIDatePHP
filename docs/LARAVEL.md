@@ -57,3 +57,30 @@ $post = Post::firstOrcreate([
     $post->published_at; // NepaliDate object
     $post->published_date; // NepaliDate object
 ```
+
+## Convert from Carbon
+
+You can easily convert Carbon instances to NepaliDate using the provided macros:
+
+### toNepaliDate() - Convert to NepaliDate Instance
+
+Convert a Carbon instance to a NepaliDate object:
+
+```php
+use Carbon\Carbon;
+
+$carbonDate = Carbon::now();
+$nepaliDateObject = $carbonDate->toNepaliDate(); // Returns NepaliDate instance
+```
+
+**Usage Examples:**
+
+```php
+$today = Carbon::now();
+
+// Get Nepali date as NepaliDate object
+$nepaliDate = $today->toNepaliDate(); // NepaliDate instance with all methods available
+
+// Use NepaliDate methods on converted instance
+echo $today->toNepaliDate()->format('Y-m-d'); // Format Nepali date
+```
