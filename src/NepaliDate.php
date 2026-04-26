@@ -9,12 +9,14 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 use RohanAdhikari\NepaliDate\Constants\Calendar;
+use RohanAdhikari\NepaliDate\Interface\Arrayable;
 use RohanAdhikari\NepaliDate\Traits\DateConverter;
 use RohanAdhikari\NepaliDate\Traits\haveDateFormats;
 use RohanAdhikari\NepaliDate\Traits\haveDateGetters;
 use RohanAdhikari\NepaliDate\Traits\haveDateParse;
 use RohanAdhikari\NepaliDate\Traits\haveDateSetters;
 use RohanAdhikari\NepaliDate\Traits\haveImmutable;
+use RohanAdhikari\NepaliDate\Traits\useArrayable;
 use RohanAdhikari\NepaliDate\Traits\useBoundaries;
 use RohanAdhikari\NepaliDate\Traits\useComparison;
 use RohanAdhikari\NepaliDate\Traits\useDefaultTimeZone;
@@ -35,7 +37,7 @@ use RohanAdhikari\NepaliDate\Traits\useUnitArithmetic;
  * @property int $second
  * @property DateTimeZone $timezone
  */
-class NepaliDate implements NepaliDateInterface
+class NepaliDate implements NepaliDateInterface, Arrayable
 {
     use DateConverter;
     use haveDateFormats;
@@ -48,6 +50,7 @@ class NepaliDate implements NepaliDateInterface
     use useMagicMethods;
     use useOverFlowBounds;
     use useUnitArithmetic;
+    use useArrayable;
 
     protected int $year;
 
@@ -72,7 +75,7 @@ class NepaliDate implements NepaliDateInterface
         int $hour = 0,
         int $minute = 0,
         int $second = 0,
-        string|DateTimeZone|null $timezone = null
+        string|DateTimeZone|null $timezone = null,
     ) {
         $this->year = $year;
         $this->month = $month;
