@@ -9,7 +9,7 @@ use RohanAdhikari\NepaliDate\NepaliDateInterface;
 
 class NepaliDateSynth extends Synth
 {
-    public static $key = 'address';
+    public static $key = 'nepali_date';
 
     public static function match($target)
     {

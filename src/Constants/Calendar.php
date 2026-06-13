@@ -28,6 +28,10 @@ final class Calendar
 
     public const END_YEAR_BS = 2100;
 
+    public const AD_TO_BS_OFFSET = 263;
+
+    public const BS_TO_AD_OFFSET = 102;
+
     public const NEPALI_DATES = [
         1899 => [31, 32, 31, 32, 31, 30, 30, 30, 29, 29, 30, 31],
         1900 => [31, 32, 31, 32, 31, 30, 30, 30, 30, 29, 29, 30],
@@ -234,13 +238,6 @@ final class Calendar
         2101 => [31, 32, 31, 32, 31, 30, 30, 30, 29, 30, 29, 31],
     ];
 
-    public const KNOWN_ANCHORS = [
-        2000 => 36525,
-        2020 => 43830,
-        2040 => 51135,
-        2060 => 58440,
-        2080 => 65745,
-    ];
 
     public const NORMAL_MONTHS = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
@@ -256,14 +253,20 @@ final class Calendar
         return self::NEPALI_DATES[$year][$month - 1];
     }
 
-    public static function getTotalBSDaysFromYear(int $year, int $fromYear): int
+    public static function getDaysInADMonth(int $year, int $month): int
     {
-        $totalDays = 0;
-        for ($i = $fromYear; $i < $year; $i++) {
-            $totalDays += array_sum(self::NEPALI_DATES[$i]);
-        }
+        return self::isLeapYear($year) ? self::LEAP_MONTHS[$month - 1] : self::NORMAL_MONTHS[$month - 1];
+    }
 
-        return $totalDays;
+    public static function getTotalBSDays(int $year, int $month, int $day): int
+    {
+        $total = 0;
+
+        for ($y = self::BASE_YEAR_BS; $y < $year; $y++) {
+            $total += self::NEPALI_DATES[$y][12];
+        }
+        $total += array_sum(array_slice(self::NEPALI_DATES[$year], 0, $month - 1));
+        return $total + $day;
     }
 
     public static function getTotalBSDaysFromBase(int $year): int
@@ -332,11 +335,6 @@ final class Calendar
         $totalDays = self::getTotalBSDays($year, $month, $day);
 
         return self::getDayOfWeek($totalDays);
-    }
-
-    public static function getDaysInADMonth(int $year, int $month): int
-    {
-        return self::isLeapYear($year) ? self::LEAP_MONTHS[$month - 1] : self::NORMAL_MONTHS[$month - 1];
     }
 
     public static function getTotalADDays(int $year, int $month, int $day): int
