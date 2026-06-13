@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace RohanAdhikari\NepaliDate\Laravel;
 
+use Illuminate\Support\Facades\Validator;
+use NepaliDate\Laravel\Validation\NepaliDateRule;
 use RohanAdhikari\NepaliDate\NepaliDate;
 
 class ServiceProvider extends \Illuminate\Support\ServiceProvider

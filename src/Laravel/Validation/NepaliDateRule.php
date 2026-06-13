@@ -1,6 +1,6 @@
 <?php
 
-namespace NepaliDate\Laravel\Validation;
+namespace RohanAdhikari\NepaliDate\Laravel\Validation;
 
 use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
