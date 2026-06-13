@@ -202,6 +202,8 @@ interface NepaliDateInterface
         string $timezone = 'Asia/Kathmandu'
     );
 
+    public function isValid(): bool;
+
     public static function fromInstance(NepaliDateInterface $instance): static;
 
     public static function fromAd(DateTime $datetime): static;

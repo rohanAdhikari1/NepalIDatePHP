@@ -111,6 +111,11 @@ class NepaliDate implements NepaliDateInterface, Arrayable
         return new DateTimeZone($timezone);
     }
 
+    public function isValid(): bool
+    {
+        return $this->isValidBsDate($this->year, $this->month, $this->day);
+    }
+
     public static function fromInstance(NepaliDateInterface $instance): static
     {
         return new static(
