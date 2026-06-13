@@ -3,17 +3,14 @@
 namespace RohanAdhikari\NepaliDate\Laravel\Validation;
 
 use Closure;
-use Illuminate\Contracts\Validation\ValidationRule;
-use RohanAdhikari\NepaliDate\Constants\Calendar;
-use RohanAdhikari\NepaliDate\NepaliDate as RohanAdhikariNepaliDate;
-use RohanAdhikari\NepaliDate\NepaliNumbers;
+use RohanAdhikari\NepaliDate\NepaliDate;
 
-class NepaliDateRule implements ValidationRule
+class NepaliDateRule implements \Illuminate\Contracts\Validation\ValidationRule
 {
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         try {
-            $date = RohanAdhikariNepaliDate::parse($value);
+            $date = NepaliDate::parse($value);
         } catch (\Exception) {
             $fail('The :attribute must be a valid Nepali date.');
             return;
