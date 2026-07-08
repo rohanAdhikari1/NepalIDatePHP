@@ -1,6 +1,6 @@
 <?php
 
-namespace RohanAdhikari\NepaliDate\Laravel\Validation;
+namespace RohanAdhikari\NepaliDate\Laravel\ValidationRule;
 
 use Closure;
 use RohanAdhikari\NepaliDate\NepaliDate;
