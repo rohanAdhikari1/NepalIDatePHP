@@ -380,20 +380,20 @@ $nepaliDate = NepaliDate::createFromFormat('h:i A', '02:45 PM');
 
 **Available Methods**
 
-| Unit   | Add Method       | Subtract Method  |
-| ------ | ---------------- | ---------------- |
-| Year   | `addYear()`      | `subYear()`      |
-| Year   | `addYears($n)`   | `subYears($n)`   |
-| Month  | `addMonth()`     | `subMonth()`     |
-| Month  | `addMonths($n)`  | `subMonths($n)`  |
-| Day    | `addDay()`       | `subDay()`       |
-| Day    | `addDays($n)`    | `subDays($n)`    |
-| Hour   | `addHour()`      | `subHour()`      |
-| Hour   | `addHours($n)`   | `subHours($n)`   |
-| Minute | `addMinute()`    | `subMinute()`    |
-| Minute | `addMinutes($n)` | `subMinutes($n)` |
-| Second | `addSecond()`    | `subSecond()`    |
-| Second | `addSeconds($n)` | `subSeconds($n)` |
+| Unit   | Add Method                                                                | Subtract Method                                                           |
+| ------ | ------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| Year   | `addYear()`                                                               | `subYear()`                                                               |
+| Year   | `addYears($n)`                                                            | `subYears($n)`                                                            |
+| Month  | `addMonth()` / `addMonthWithOverflow()` / `addMonthNoOverflow()`          | `subMonth()` / `subMonthWithOverflow()` / `subMonthNoOverflow()`          |
+| Month  | `addMonths($n)` / `addMonthsWithOverflow($n)` / `addMonthsNoOverflow($n)` | `subMonths($n)` / `subMonthsWithOverflow($n)` / `subMonthsNoOverflow($n)` |
+| Day    | `addDay()`                                                                | `subDay()`                                                                |
+| Day    | `addDays($n)`                                                             | `subDays($n)`                                                             |
+| Hour   | `addHour()`                                                               | `subHour()`                                                               |
+| Hour   | `addHours($n)`                                                            | `subHours($n)`                                                            |
+| Minute | `addMinute()`                                                             | `subMinute()`                                                             |
+| Minute | `addMinutes($n)`                                                          | `subMinutes($n)`                                                          |
+| Second | `addSecond()`                                                             | `subSecond()`                                                             |
+| Second | `addSeconds($n)`                                                          | `subSeconds($n)`                                                          |
 
 **Example:**
 
@@ -422,6 +422,23 @@ use RohanAdhikari\NepaliDate\NepaliDate;
     echo $nepalidate;
     //Example Output: 2083-05-27 13:49:53
 
+```
+
+### Month overflow control
+
+Month arithmetic now supports explicit overflow behavior. Use the suffix methods for a single call, or configure the default globally with `NepaliDate::useMonthsOverflow(true)` / `NepaliDate::useMonthsOverflow(false)`.
+
+```php
+use RohanAdhikari\NepaliDate\NepaliDate;
+
+NepaliDate::useMonthsOverflow(true); // enable month overflow globally
+
+$date = NepaliDate::now();
+$date->addMonthWithOverflow();
+$date->addMonthNoOverflow();
+
+$date->setMonthsOverflow(false); // override only for this instance
+$date->resetMonthsOverflow(); // revert to the global setting
 ```
 
 ---
