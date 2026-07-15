@@ -2,10 +2,11 @@
 
 namespace RohanAdhikari\NepaliDate\Laravel\Casts;
 
+use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Database\Eloquent\Model;
 use RohanAdhikari\NepaliDate\NepaliDate;
 
-class ADAsNepaliDate implements \Illuminate\Contracts\Database\Eloquent\CastsAttributes
+class ADAsNepaliDate implements CastsAttributes
 {
     protected $format;
 
@@ -24,6 +25,7 @@ class ADAsNepaliDate implements \Illuminate\Contracts\Database\Eloquent\CastsAtt
         if (blank($value)) {
             return null;
         }
+
         return NepaliDate::fromNotation($value);
     }
 
@@ -40,6 +42,7 @@ class ADAsNepaliDate implements \Illuminate\Contracts\Database\Eloquent\CastsAtt
         if ($value instanceof NepaliDate) {
             return $value->toAd()->format($this->format);
         }
+
         return $value;
     }
 }

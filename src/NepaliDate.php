@@ -16,6 +16,7 @@ use RohanAdhikari\NepaliDate\Traits\haveDateGetters;
 use RohanAdhikari\NepaliDate\Traits\haveDateParse;
 use RohanAdhikari\NepaliDate\Traits\haveDateSetters;
 use RohanAdhikari\NepaliDate\Traits\haveImmutable;
+use RohanAdhikari\NepaliDate\Traits\haveMonthOverflow;
 use RohanAdhikari\NepaliDate\Traits\useArrayable;
 use RohanAdhikari\NepaliDate\Traits\useBoundaries;
 use RohanAdhikari\NepaliDate\Traits\useComparison;
@@ -37,12 +38,14 @@ use RohanAdhikari\NepaliDate\Traits\useUnitArithmetic;
  * @property int $second
  * @property DateTimeZone $timezone
  */
-class NepaliDate implements NepaliDateInterface, Arrayable
+class NepaliDate implements Arrayable, NepaliDateInterface
 {
     use DateConverter;
     use haveDateFormats;
     use haveDateGetters, haveDateSetters, haveImmutable;
     use haveDateParse;
+    use haveMonthOverflow;
+    use useArrayable;
     use useBoundaries;
     use useComparison, useDifference;
     use useDefaultTimeZone;
@@ -50,7 +53,6 @@ class NepaliDate implements NepaliDateInterface, Arrayable
     use useMagicMethods;
     use useOverFlowBounds;
     use useUnitArithmetic;
-    use useArrayable;
 
     protected int $year;
 

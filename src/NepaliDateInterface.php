@@ -67,31 +67,39 @@ use DateTimeZone;
  * @method $this setTimeZone(DateTimeZone $timezone)
  * @method $this setTZ(DateTimeZone $timezone)
  * @method $this setTZone(DateTimeZone $timezone)
- * @method $this addYear(int $value)
+ * @method $this addYear()
  * @method $this addYears(int $value)
- * @method $this addMonth(int $value)
+ * @method $this addMonth()
  * @method $this addMonths(int $value)
- * @method $this addDay(int $value)
+ * @method $this addDay()
  * @method $this addDays(int $value)
- * @method $this addHour(int $value)
+ * @method $this addHour()
  * @method $this addHours(int $value)
- * @method $this addMinute(int $value)
+ * @method $this addMinute()
  * @method $this addMinutes(int $value)
- * @method $this addSecond(int $value)
+ * @method $this addSecond()
  * @method $this addSeconds(int $value)
- * @method $this subYear(int $value)
+ * @method $this subYear()
  * @method $this subYears(int $value)
- * @method $this subMonth(int $value)
+ * @method $this subMonth()
  * @method $this subMonths(int $value)
- * @method $this subDay(int $value)
+ * @method $this subDay()
  * @method $this subDays(int $value)
- * @method $this subHour(int $value)
+ * @method $this subHour()
  * @method $this subHours(int $value)
- * @method $this subMinute(int $value)
+ * @method $this subMinute()
  * @method $this subMinutes(int $value)
- * @method $this subSecond(int $value)
+ * @method $this subSecond()
  * @method $this subSeconds(int $value)
- */
+ * @method $this addMonthWithOverflow()
+ * @method $this addMonthsWithOverflow(int $value)
+ * @method $this subMonthWithOverflow()
+ * @method $this subMonthsWithOverflow(int $value)
+ * @method $this addMonthNoOverflow()
+ * @method $this addMonthsNoOverflow(int $value)
+ * @method $this subMonthNoOverflow()
+ * @method $this subMonthsNoOverflow(int $value)
+ **/
 interface NepaliDateInterface
 {
     /**
@@ -545,4 +553,17 @@ interface NepaliDateInterface
     public static function resetOverflowSettings(): void;
 
     public function resetOverflow(): static;
+
+    // month overflow
+    public static function useMonthsOverflow(bool $overflow = true): void;
+
+    public static function enableMonthsOverflow(): void;
+
+    public static function disableMonthsOverflow(): void;
+
+    public static function shouldOverflowMonthsGlobally(): bool;
+
+    public function setMonthsOverflow(?bool $overflow): static;
+
+    public function resetMonthsOverflow(): static;
 }

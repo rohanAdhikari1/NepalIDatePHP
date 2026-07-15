@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace RohanAdhikari\NepaliDate\Laravel;
 
+use Carbon\Carbon;
 use RohanAdhikari\NepaliDate\NepaliDate;
 
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
@@ -23,8 +24,8 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     {
         $timezone = config('app.timezone', 'Asia/Kathmandu');
         NepaliDate::setDefaultTimeZoneName($timezone);
-        if (class_exists(\Carbon\Carbon::class)) {
-            \Carbon\Carbon::macro('toNepaliDate', function (): NepaliDate {
+        if (class_exists(Carbon::class)) {
+            Carbon::macro('toNepaliDate', function (): NepaliDate {
                 return NepaliDate::fromAd($this->toDateTime());
             });
         }

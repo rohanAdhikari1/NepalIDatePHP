@@ -6,6 +6,7 @@ namespace RohanAdhikari\NepaliDate\Traits;
 
 use RohanAdhikari\NepaliDate\Exceptions\InvalidNepaliDateLocale;
 use RohanAdhikari\NepaliDate\NepaliDateInterface;
+use RohanAdhikari\NepaliDate\NepaliNumbers;
 
 trait useLocale
 {
@@ -100,7 +101,7 @@ trait useLocale
 
     private static array $numberConverters = [
         'en' => null,
-        'np' => [\RohanAdhikari\NepaliDate\NepaliNumbers::class, 'convertToNepali'],
+        'np' => [NepaliNumbers::class, 'convertToNepali'],
     ];
 
     public function getLocale(): string

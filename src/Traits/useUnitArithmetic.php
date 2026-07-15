@@ -27,9 +27,9 @@ trait useUnitArithmetic
     {
         $range = $max - $min + 1;
         $offset = $value - $min;
-        $overflow = intdiv($value - $min, $range);
-        if (($value - $min) < 0 && ($value - $min) % $range !== 0) {
-            $overflow -= 1;
+        $overflow = intdiv($offset, $range);
+        if ($offset < 0 && $offset % $range !== 0) {
+            $overflow--;
         }
         if ($overflow !== 0 && $this->isBoundActive($unit)) {
             throw new NepaliDateOutOfBoundsException("Overflow detected for unit '$unit'.");
@@ -46,7 +46,7 @@ trait useUnitArithmetic
         return $normalized;
     }
 
-    protected function _modifyUnit(string $unit, int $amount): void
+    protected function _modifyUnit(string $unit, int $amount, ?bool $monthOverflow = null): void
     {
         switch ($unit) {
             case 'year':
@@ -55,6 +55,7 @@ trait useUnitArithmetic
 
             case 'month':
                 $this->month = $this->normalizeOrThrow($this->month + $amount, 12, 'month', fn ($overflow) => $this->_modifyUnit('year', $overflow));
+                $this->adjustDayAfterMonthChange($monthOverflow);
                 break;
 
             case 'day':
@@ -79,17 +80,36 @@ trait useUnitArithmetic
         }
     }
 
+    protected function adjustDayAfterMonthChange(?bool $monthOverflow): void
+    {
+        $monthOverflow ??= $this->shouldOverflowMonths();
+        $daysInMonth = Calendar::getDaysInBSMonth($this->year, $this->month);
+        if ($this->day <= $daysInMonth) {
+            return;
+        }
+        if ($monthOverflow) {
+            $overflow = $this->day - $daysInMonth;
+            $this->day = $daysInMonth;
+            $this->_modifyUnit('day', $overflow);
+        } else {
+            $this->day = $daysInMonth;
+        }
+    }
+
     /**
      * Generic unit modifier.
      *
      * @param  string  $unit  Unit name ('year', 'month', 'day', etc.)
      * @param  int  $amount  Amount to modify
+     * @param  bool|null  $monthOverflow  null = use default setting,
+     *                                    true = with overflow,
+     *                                    false = no overflow.
      */
-    public function modifyUnit(string|NepaliUnit $unit, int $amount): static
+    public function modifyUnit(string|NepaliUnit $unit, int $amount, ?bool $monthOverflow = null): static
     {
         $unit = NepaliUnit::toName($unit);
         $instance = $this->castInstance();
-        $instance->_modifyUnit($unit, $amount);
+        $instance->_modifyUnit($unit, $amount, $monthOverflow);
         $instance->setDayOfWeek();
 
         return $instance;
@@ -134,11 +154,12 @@ trait useUnitArithmetic
      */
     public function handleUnitAirthmeticDynamicCall(string $method, array $arguments): ?static
     {
-        if (! preg_match('/^(add|sub)(Year|Month|Day|Hour|Minute|Second)s?$/', $method, $matches)) {
+        if (! preg_match('/^(add|sub)(Year|Month|Day|Hour|Minute|Second)s?(WithOverflow|NoOverflow)?$/', $method, $matches)) {
             return null;
         }
         $operation = $matches[1];
         $unit = strtolower($matches[2]);
+        $overflow = $matches[3] ?? '';
         $requiresArgument = str_ends_with($method, 's');
         if ($requiresArgument && ! isset($arguments[0])) {
             throw new \InvalidArgumentException("Missing argument for $method");
@@ -147,7 +168,12 @@ trait useUnitArithmetic
         if ($operation === 'sub') {
             $value = -$value;
         }
+        $monthOverflow = match ($overflow) {
+            'WithOverflow' => true,
+            'NoOverflow' => false,
+            default => null,
+        };
 
-        return $this->modifyUnit($unit, $value);
+        return $this->modifyUnit($unit, $value, $monthOverflow);
     }
 }
