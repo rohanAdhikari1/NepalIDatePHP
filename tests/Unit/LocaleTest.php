@@ -7,6 +7,26 @@ describe('Locale Functions Test', function () {
     $class = new class
     {
         use useLocale;
+
+        public static function callGetIndexFromMonths(string $v): ?int
+        {
+            return self::getIndexFromMonths($v);
+        }
+
+        public static function callGetIndexFromShortMonths(string $v): ?int
+        {
+            return self::getIndexFromShortMonths($v);
+        }
+
+        public static function callGetIndexFromWeekDays(string $v): ?int
+        {
+            return self::getIndexFromWeekDays($v);
+        }
+
+        public static function callGetIndexFromShortWeekDays(string $v): ?int
+        {
+            return self::getIndexFromShortWeekDays($v);
+        }
     };
     it('return correct locale', function () use ($class) {
         $class::defaultLocale(NepaliDateInterface::ENGLISH);
@@ -51,41 +71,33 @@ describe('Locale Functions Test', function () {
     });
 
     it('return correct index from month after customization', function () use ($class) {
-        $method = new ReflectionMethod($class, 'getIndexFromMonths');
-        $method->setAccessible(true);
-        expect($method->invoke($class, 'Chait'))->toBe(11);
-        expect($method->invoke($class, 'Shrawan'))->toBe(null);
-        expect($method->invoke($class, 'फाल्गुण'))->toBe(10);
-        expect($method->invoke($class, 'श्रावण'))->toBe(3);
-        expect($method->invoke($class, 'December'))->toBe(null);
+        expect($class::callGetIndexFromMonths('Chait'))->toBe(11);
+        expect($class::callGetIndexFromMonths('Shrawan'))->toBe(null);
+        expect($class::callGetIndexFromMonths('फाल्गुण'))->toBe(10);
+        expect($class::callGetIndexFromMonths('श्रावण'))->toBe(3);
+        expect($class::callGetIndexFromMonths('December'))->toBe(null);
     });
 
     it('return correct index from Short month', function () use ($class) {
-        $method = new ReflectionMethod($class, 'getIndexFromShortMonths');
-        $method->setAccessible(true);
-        expect($method->invoke($class, 'Ash'))->toBe(2);
-        expect($method->invoke($class, 'Pou'))->toBe(8);
-        expect($method->invoke($class, 'पौ'))->toBe(8);
-        expect($method->invoke($class, 'चै'))->toBe(11);
-        expect($method->invoke($class, 'Dec'))->toBe(null);
+        expect($class::callGetIndexFromShortMonths('Ash'))->toBe(2);
+        expect($class::callGetIndexFromShortMonths('Pou'))->toBe(8);
+        expect($class::callGetIndexFromShortMonths('पौ'))->toBe(8);
+        expect($class::callGetIndexFromShortMonths('चै'))->toBe(11);
+        expect($class::callGetIndexFromShortMonths('Dec'))->toBe(null);
     });
 
     it('return correct index from WeekDay', function () use ($class) {
-        $method = new ReflectionMethod($class, 'getIndexFromWeekDays');
-        $method->setAccessible(true);
-        expect($method->invoke($class, 'Sunday'))->toBe(0);
-        expect($method->invoke($class, 'Saturday'))->toBe(6);
-        expect($method->invoke($class, 'आइतबार'))->toBe(0);
-        expect($method->invoke($class, 'शनिबार'))->toBe(6);
+        expect($class::callGetIndexFromWeekDays('Sunday'))->toBe(0);
+        expect($class::callGetIndexFromWeekDays('Saturday'))->toBe(6);
+        expect($class::callGetIndexFromWeekDays('आइतबार'))->toBe(0);
+        expect($class::callGetIndexFromWeekDays('शनिबार'))->toBe(6);
     });
 
     it('return correct index from Short WeekDay', function () use ($class) {
-        $method = new ReflectionMethod($class, 'getIndexFromShortWeekDays');
-        $method->setAccessible(true);
-        expect($method->invoke($class, 'Mon'))->toBe(1);
-        expect($method->invoke($class, 'Fri'))->toBe(5);
-        expect($method->invoke($class, 'सोम'))->toBe(1);
-        expect($method->invoke($class, 'शुक्र'))->toBe(5);
+        expect($class::callGetIndexFromShortWeekDays('Mon'))->toBe(1);
+        expect($class::callGetIndexFromShortWeekDays('Fri'))->toBe(5);
+        expect($class::callGetIndexFromShortWeekDays('सोम'))->toBe(1);
+        expect($class::callGetIndexFromShortWeekDays('शुक्र'))->toBe(5);
     });
 
     it('locale reset all works?', function () use ($class) {

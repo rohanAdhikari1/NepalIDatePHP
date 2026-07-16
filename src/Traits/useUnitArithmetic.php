@@ -31,19 +31,78 @@ trait useUnitArithmetic
         if ($offset < 0 && $offset % $range !== 0) {
             $overflow--;
         }
-        if ($overflow !== 0 && $this->isBoundActive($unit)) {
-            throw new NepaliDateOutOfBoundsException("Overflow detected for unit '$unit'.");
-        }
+        $this->assertNoOverflowIfBound($overflow !== 0, $unit);
         if ($overflow !== 0) {
             $overflowCallback($overflow);
-            if ($unit === 'day') {
-                $max = Calendar::getDaysInBSMonth($this->year, $this->month);
-                $range = $max - $min + 1;
-            }
         }
-        $normalized = ($offset % $range + $range) % $range + $min;
 
-        return $normalized;
+        return ($offset % $range + $range) % $range + $min;
+    }
+
+    /**
+     * Normalize a value for a VARIABLE-capacity unit — one whose range depends
+     * on the state of a containing unit (e.g. days-in-month depends on which
+     * year and month it is). Because the range can change after every step,
+     * this cannot be resolved with a single division like
+     * {@see normalizeOrThrow()}; it must re-resolve the range after each step
+     * into the containing unit and carry the remainder across.
+     *
+     * This is intentionally generic and reusable: any unit with a
+     * state-dependent capacity can be normalized by passing a resolver for
+     * "what's the current max?" and an advancer for "move the containing
+     * unit by one step".
+     *
+     * @param  int  $value  Current or target value
+     * @param  int  $min  Minimum value for the unit
+     * @param  string  $unit  Unit name for bounds check
+     * @param  callable(): int  $rangeResolver  Returns the current max (inclusive), given current state
+     * @param  callable(int): void  $advance  Moves the containing unit by +1 or -1 step
+     * @return int Normalized value
+     *
+     * @throws NepaliDateOutOfBoundsException if overflow occurs and bounds are active
+     */
+    protected function normalizeVariableRange(int $value, int $min, string $unit, callable $rangeResolver, callable $advance): int
+    {
+        $max = $rangeResolver();
+
+        $this->assertNoOverflowIfBound($value < $min || $value > $max, $unit);
+
+        while ($value > $max) {
+            $value -= ($max - $min + 1);
+            $advance(1);
+            $max = $rangeResolver();
+        }
+
+        while ($value < $min) {
+            $advance(-1);
+            $max = $rangeResolver();
+            $value += ($max - $min + 1);
+        }
+
+        return $value;
+    }
+
+    protected function assertNoOverflowIfBound(bool $wouldOverflow, string $unit): void
+    {
+        if ($wouldOverflow && $this->isBoundActive($unit)) {
+            throw new NepaliDateOutOfBoundsException("Overflow detected for unit '$unit'.");
+        }
+    }
+
+    protected function shiftMonthOnly(int $delta): void
+    {
+        $this->month = $this->normalizeOrThrow($this->month + $delta, 12, 'month', fn($overflow) => $this->_modifyUnit('year', $overflow));
+    }
+
+    protected function addDaysRaw(int $amount): void
+    {
+        $this->day = $this->normalizeVariableRange(
+            $this->day + $amount,
+            1,
+            'day',
+            fn(): int => Calendar::getDaysInBSMonth($this->year, $this->month),
+            fn(int $direction) => $this->shiftMonthOnly($direction),
+        );
     }
 
     protected function _modifyUnit(string $unit, int $amount, ?bool $monthOverflow = null): void
@@ -54,25 +113,24 @@ trait useUnitArithmetic
                 break;
 
             case 'month':
-                $this->month = $this->normalizeOrThrow($this->month + $amount, 12, 'month', fn ($overflow) => $this->_modifyUnit('year', $overflow));
+                $this->month = $this->normalizeOrThrow($this->month + $amount, 12, 'month', fn($overflow) => $this->_modifyUnit('year', $overflow));
                 $this->adjustDayAfterMonthChange($monthOverflow);
                 break;
 
             case 'day':
-                $daysInMonth = Calendar::getDaysInBSMonth($this->year, $this->month);
-                $this->day = $this->normalizeOrThrow($this->day + $amount, $daysInMonth, 'day', fn ($overflow) => $this->_modifyUnit('month', $overflow));
+                $this->addDaysRaw($amount);
                 break;
 
             case 'hour':
-                $this->hour = $this->normalizeOrThrow($this->hour + $amount, 23, 'hour', fn ($overflow) => $this->_modifyUnit('day', $overflow), 0);
+                $this->hour = $this->normalizeOrThrow($this->hour + $amount, 23, 'hour', fn($overflow) => $this->_modifyUnit('day', $overflow), 0);
                 break;
 
             case 'minute':
-                $this->minute = $this->normalizeOrThrow($this->minute + $amount, 59, 'minute', fn ($overflow) => $this->_modifyUnit('hour', $overflow), 0);
+                $this->minute = $this->normalizeOrThrow($this->minute + $amount, 59, 'minute', fn($overflow) => $this->_modifyUnit('hour', $overflow), 0);
                 break;
 
             case 'second':
-                $this->second = $this->normalizeOrThrow($this->second + $amount, 59, 'second', fn ($overflow) => $this->_modifyUnit('minute', $overflow), 0);
+                $this->second = $this->normalizeOrThrow($this->second + $amount, 59, 'second', fn($overflow) => $this->_modifyUnit('minute', $overflow), 0);
                 break;
 
             default:
