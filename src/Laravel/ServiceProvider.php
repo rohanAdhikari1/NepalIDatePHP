@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace RohanAdhikari\NepaliDate\Laravel;
 
 use Carbon\Carbon;
+use RohanAdhikari\NepaliDate\Laravel\Blade\BladeDirectives;
 use RohanAdhikari\NepaliDate\NepaliDate;
 
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
@@ -29,5 +30,6 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
                 return NepaliDate::fromAd($this->toDateTime());
             });
         }
+        BladeDirectives::register();
     }
 }
