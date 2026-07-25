@@ -36,7 +36,7 @@ trait useValidator
 
     public static function isvalidAdYear(int $year): bool
     {
-        return $year >= Calendar::START_YEAR_AD && $year <= Calendar::START_YEAR_AD + (Calendar::END_YEAR_BS - Calendar::START_YEAR_BS);
+        return $year >= Calendar::START_YEAR_AD && $year <= Calendar::BASE_YEAR_AD + (Calendar::END_YEAR_BS - Calendar::START_YEAR_BS);
     }
 
     public static function isvalidBsDay(int $year, int $month, int $day): bool
@@ -66,7 +66,7 @@ trait useValidator
     public static function validateAdDate(int $year, int $month, int $day): void
     {
         if (! self::isvalidAdYear($year)) {
-            throw new NepaliDateOutOfBoundsException("Invalid AD year: $year. Valid range is ".Calendar::START_YEAR_AD.' to '.(Calendar::START_DAY_AD + (Calendar::END_YEAR_BS - Calendar::START_YEAR_BS)).'.');
+            throw new NepaliDateOutOfBoundsException("Invalid AD year: $year. Valid range is ".Calendar::START_YEAR_AD.' to '.(Calendar::BASE_YEAR_AD + (Calendar::END_YEAR_BS - Calendar::START_YEAR_BS)).'.');
         }
         if (! self::isvalidMonth($month)) {
             throw new NepaliDateOutOfBoundsException("Invalid month: $month. Valid range is 1 to 12.");

@@ -13,7 +13,8 @@ use RohanAdhikari\NepaliDate\NepaliDate;
 use RohanAdhikari\NepaliDate\NepaliDateInterface;
 
 /**
- * Registers Blade echo directives 
+ * Registers Blade echo directives
+ *
  * @see ServiceProvider
  */
 class BladeDirectives

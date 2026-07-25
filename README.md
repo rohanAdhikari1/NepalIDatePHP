@@ -1,4 +1,4 @@
-# NepaliDate — Bikram Sambat (BS) Date & Time for PHP
+# NepaliDate — Nepali Date (Bikram Sambat / BS) for PHP & Laravel
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/rohanadhikari/nepali-date.svg?style=flat-square)](https://packagist.org/packages/rohanadhikari/nepali-date)
 [![Total Downloads](https://img.shields.io/packagist/dt/rohanadhikari/nepali-date.svg?style=flat-square)](https://packagist.org/packages/rohanadhikari/nepali-date)
@@ -14,7 +14,7 @@ Whether you're building a Nepali government portal, a Nepal-based e-commerce app
 ## ✨ Features
 
 - 🕒 Full **Nepali (BS) date and time** support — not just year/month/day conversion
-- 🗓 Simple, accurate conversion **between AD and BS**
+- 🗓 Simple, accurate conversion **between AD and BS**, optimized for bulk conversion — see [Performance](./docs/PERFORMANCE.md)
 - 🔁 Both **mutable** (`NepaliDate`) and **immutable** (`NepaliDateImmutable`) variants
 - ➕ Add, subtract, and snap dates by year, month, day, hour, minute, or second
 - 🌐 Built-in **Nepali (`np`) and English (`en`) locales**, with full customization support
@@ -104,6 +104,7 @@ The core README covers the essentials; everything else lives in [`docs/`](./docs
 | [Calendar](./docs/CALENDER.md)                    | Low-level BS/AD calendar math and lookup tables                               |
 | [Exceptions](./docs/EXCEPTIONS.md)                | What can be thrown, and how to guard against it                               |
 | [Laravel Integration](./docs/LARAVEL.md)          | Eloquent casts, validation rules, Blade directives                            |
+| [Performance](./docs/PERFORMANCE.md)              | Bulk-conversion results and practical guidance for high-throughput usage      |
 
 ---
 
@@ -126,9 +127,9 @@ $date->resetLocale();
 
 ---
 
-## Laravel Integration
+## Nepali Date in Laravel
 
-Casts, form validation rules, and Blade directives (`@nepaliDate`, `@nepaliNow`, `@nepaliWeekend`, ...) are all included and auto-registered — see the [Laravel Integration Guide](./docs/LARAVEL.md) for the full reference.
+Using Nepali date in Laravel is a first-class use case for this package: Eloquent casts, form validation rules, and Blade directives (`@nepaliDate`, `@nepaliNow`, `@nepaliWeekend`, ...) are all included and auto-registered via a Laravel service provider — no extra config. See the [Laravel Integration Guide](./docs/LARAVEL.md) (with FAQ) for the full reference.
 
 ```php
 use RohanAdhikari\NepaliDate\Laravel\Casts\ADAsNepaliDate;
@@ -151,9 +152,10 @@ class Post extends Model
 ## 🧪 Testing
 
 ```bash
-composer test      # Run the Pest test suite
-composer analyse    # Run PHPStan static analysis
-composer format      # Run Laravel Pint
+composer test        # Run the Pest test suite
+composer analyse     # Run PHPStan static analysis
+composer format       # Run Laravel Pint
+composer time:check    # Benchmark AD <-> BS conversion — see docs/PERFORMANCE.md
 ```
 
 ---

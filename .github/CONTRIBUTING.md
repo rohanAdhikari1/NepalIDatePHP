@@ -52,4 +52,12 @@ If the project maintainer has any additional requirements, you will find them li
 
 - **Send coherent history** - Make sure each individual commit in your pull request is meaningful. If you had to make multiple intermediate commits while developing, please [squash them](https://www.git-scm.com/book/en/v2/Git-Tools-Rewriting-History#Changing-Multiple-Commit-Messages) before submitting.
 
+## Performance-Sensitive Code
+
+`src/Constants/Calendar.php`, `src/Traits/DateConverter.php`, and `src/Traits/haveDateFormats.php` are the hot path for every date operation in the library — AD ⇄ BS conversion and formatting run through them on every `NepaliDate::now()`, `fromAd()`, `toAd()`, and `format()` call. If your PR touches any of these:
+
+- Read [Performance Internals](../docs/PERFORMANCE_INTERNALS.md) first — it explains the current algorithm, why it's shaped the way it is, and what's already been tried and rejected.
+- Run `composer run time:check` before and after your change, and include the numbers in your PR description.
+- Run `php check/VerifyConversionRoundTrip.php` (takes 1-2 minutes) to confirm every date in the supported range still converts correctly — this is what caught two real bugs during the v2 rewrite, and it's the only thing that exercises the full 1900–2100 range.
+
 **Happy coding**!

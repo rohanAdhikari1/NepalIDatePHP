@@ -1,11 +1,12 @@
-# NepaliDate in Laravel
+# Nepali Date in Laravel (NepaliDate Package)
 
-`RohanAdhikari\NepaliDate` ships a Laravel service provider that is auto-discovered — no manual registration needed. It wires up:
+Using a **Nepali date (Bikram Sambat / BS) in Laravel** usually means three things: storing/reading BS dates on Eloquent models, validating BS date input, and displaying BS dates in Blade views. `RohanAdhikari\NepaliDate` covers all three out of the box via a Laravel service provider that's auto-discovered — no manual registration needed. It wires up:
 
 - [Eloquent attribute casting](#eloquent-attribute-casting) between AD/BS storage and `NepaliDate` objects
 - A [`toNepaliDate()` macro](#converting-from-carbon) on `Carbon`
 - A [validation rule](#validating-nepali-dates) for form requests
 - [Blade directives](#blade-directives) for formatting dates and numbers directly in views
+- Answers to common questions in the [FAQ](#faq)
 
 On boot, it also sets `NepaliDate`'s default timezone from your `app.timezone` config value.
 
@@ -168,3 +169,27 @@ Registered with Laravel's `Blade::if()`, so each one comes with matching `@else.
 ```
 
 > All directives are registered automatically by the package's service provider — no configuration needed. They live in [`RohanAdhikari\NepaliDate\Laravel\Blade\BladeDirectives`](../src/Laravel/Blade/BladeDirectives.php) if you need to see the underlying implementation.
+
+---
+
+## FAQ
+
+### How do I use Nepali date in Laravel?
+
+Install the package with `composer require rohanadhikari/nepali-date`. Laravel auto-discovers the service provider, so casts, validation rules, and Blade directives are available immediately — no config file, no manual registration. See [Eloquent Attribute Casting](#eloquent-attribute-casting) to store/read BS dates on a model, or [Blade Directives](#blade-directives) to display one in a view with `@nepaliDate($date)`.
+
+### Is there a Laravel package for Nepali (Bikram Sambat) date?
+
+Yes — this package (`rohanadhikari/nepali-date`). It's framework-agnostic at its core (works in plain PHP) but ships dedicated Laravel integration: Eloquent casts (`AsNepaliDate`, `ADAsNepaliDate`), a `ValidationRule`, and Blade directives, all auto-registered via `RohanAdhikari\NepaliDate\Laravel\ServiceProvider`.
+
+### How do I show a Nepali date in a Blade view?
+
+Use the `@nepaliDate` directive: `@nepaliDate($post->published_at, 'l, F j, Y')`. It accepts a `NepaliDate`, a `Carbon`/`DateTime` instance, a date string, or nothing (defaults to now). See [Blade Directives](#blade-directives) for the full list, including `@nepaliNow`, `@nepaliNumber`, and conditionals like `@nepaliWeekend`.
+
+### How do I convert AD to BS (Bikram Sambat) in a Laravel model?
+
+Cast the column with `ADAsNepaliDate::class` (or `ADAsNepaliDateTime::class` for full time precision) — see [Storing AD, retrieving as NepaliDate](#storing-ad-retrieving-as-nepalidate). The attribute is stored as a normal Gregorian date/datetime and automatically converted to a `NepaliDate` object whenever you read it.
+
+### Does this package validate Nepali date form input in Laravel?
+
+Yes, via `NepaliDateRule`, which implements Laravel's `ValidationRule` contract — see [Validating Nepali Dates](#validating-nepali-dates). It fails validation when the input isn't a real, parseable BS date.

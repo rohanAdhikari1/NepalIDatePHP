@@ -147,10 +147,12 @@ trait useLocale
         if (! self::localeExists($locale)) {
             throw new InvalidNepaliDateLocale("Locale '{$locale}' does not exist.");
         }
-        $default = self::$defaultLocales[$locale];
-        $override = self::$overrides[$locale] ?? [];
 
-        return array_merge($default, $override);
+        if (empty(self::$overrides[$locale])) {
+            return self::$defaultLocales[$locale];
+        }
+
+        return array_merge(self::$defaultLocales[$locale], self::$overrides[$locale]);
     }
 
     public static function getLocalePartFor(string $part, string $locale): array
@@ -177,14 +179,7 @@ trait useLocale
 
     public function getLocaleData(?string $locale = null): array
     {
-        $locale = $locale ?? $this->getLocale();
-        if (! self::localeExists($locale)) {
-            throw new InvalidNepaliDateLocale("Locale '{$locale}' does not exist.");
-        }
-        $default = self::$defaultLocales[$locale];
-        $override = self::$overrides[$locale] ?? [];
-
-        return array_merge($default, $override);
+        return self::getLocaleDataFor($locale ?? $this->getLocale());
     }
 
     public function getLocalePart(string $part, ?string $locale = null): array

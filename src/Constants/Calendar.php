@@ -238,6 +238,16 @@ final class Calendar
 
     public const LEAP_MONTHS = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
+    /**
+     * @var array<int,int>|null
+     */
+    private static ?array $bsCumulativeDaysBeforeYear = null;
+
+    /**
+     * @var array<int,int>|null
+     */
+    private static ?array $adCumulativeDaysBeforeYear = null;
+
     public static function isLeapYear(int $year): bool
     {
         return ($year % 4 === 0 && $year % 100 !== 0) || ($year % 400 === 0);
@@ -250,10 +260,7 @@ final class Calendar
 
     public static function getTotalBSDays(int $year, int $month, int $day): int
     {
-        $totalDays = 0;
-        for ($i = self::BASE_YEAR_BS; $i < $year; $i++) {
-            $totalDays += array_sum(self::NEPALI_DATES[$i]);
-        }
+        $totalDays = self::bsDaysBeforeYear($year);
         $totalDays += array_sum(array_slice(self::NEPALI_DATES[$year], 0, $month - 1));
         $totalDays += $day;
 
@@ -284,13 +291,47 @@ final class Calendar
 
     public static function getTotalADDays(int $year, int $month, int $day): int
     {
-        $totalDays = 0;
-        for ($i = self::BASE_YEAR_AD; $i < $year; $i++) {
-            $totalDays += self::isLeapYear($i) ? 366 : 365;
-        }
-        $totalDays += array_sum(array_slice(self::isLeapYear($year) ? self::LEAP_MONTHS : self::NORMAL_MONTHS, 0, $month - 1));
+        $totalDays = self::adDaysBeforeYear($year);
+        $months = self::isLeapYear($year) ? self::LEAP_MONTHS : self::NORMAL_MONTHS;
+        $totalDays += array_sum(array_slice($months, 0, $month - 1));
         $totalDays += $day;
 
         return $totalDays;
+    }
+
+    private static function bsDaysBeforeYear(int $year): int
+    {
+        if ($year <= self::BASE_YEAR_BS) {
+            return 0;
+        }
+
+        self::$bsCumulativeDaysBeforeYear ??= [self::BASE_YEAR_BS => 0];
+        $cache = &self::$bsCumulativeDaysBeforeYear;
+
+        for ($cachedYear = array_key_last($cache) + 1; $cachedYear <= $year; $cachedYear++) {
+            $cache[$cachedYear] = $cache[$cachedYear - 1] + array_sum(self::NEPALI_DATES[$cachedYear - 1]);
+        }
+
+        return $cache[$year];
+    }
+
+    private static function adDaysBeforeYear(int $year): int
+    {
+        if ($year === self::START_YEAR_AD) {
+            return -(self::isLeapYear(self::START_YEAR_AD) ? 366 : 365);
+        }
+
+        if ($year <= self::BASE_YEAR_AD) {
+            return 0;
+        }
+
+        self::$adCumulativeDaysBeforeYear ??= [self::BASE_YEAR_AD => 0];
+        $cache = &self::$adCumulativeDaysBeforeYear;
+
+        for ($cachedYear = array_key_last($cache) + 1; $cachedYear <= $year; $cachedYear++) {
+            $cache[$cachedYear] = $cache[$cachedYear - 1] + (self::isLeapYear($cachedYear - 1) ? 366 : 365);
+        }
+
+        return $cache[$year];
     }
 }

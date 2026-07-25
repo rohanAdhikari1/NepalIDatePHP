@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace RohanAdhikari\NepaliDate\Traits;
 
+use Closure;
 use RohanAdhikari\NepaliDate\Constants\Calendar;
 
 trait DateConverter
@@ -17,22 +18,14 @@ trait DateConverter
     {
         self::validateAdDate($year, $month, $day);
         $totalDays = Calendar::getTotalADDays($year, $month, $day);
-        $bsYear = Calendar::START_YEAR_BS;
-        $bsMonth = Calendar::START_MONTH_BS;
-        $bsDay = Calendar::START_DAY_BS - 1;
-        for ($i = 0; $i < $totalDays; $i++) {
-            $bsDay++;
-            if ($bsDay > Calendar::getDaysInBSMonth($bsYear, $bsMonth)) {
-                $bsMonth++;
-                $bsDay = 1;
-                if ($bsMonth > 12) {
-                    $bsYear++;
-                    $bsMonth = 1;
-                }
-            }
-        }
 
-        return [$bsYear, $bsMonth, $bsDay];
+        return self::walkFromAnchor(
+            Calendar::START_YEAR_BS,
+            Calendar::START_MONTH_BS,
+            Calendar::START_DAY_BS - 1,
+            $totalDays,
+            Calendar::getDaysInBSMonth(...)
+        );
     }
 
     /**
@@ -42,21 +35,69 @@ trait DateConverter
     {
         self::validateBsDate($year, $month, $day);
         $totalDays = Calendar::getTotalBSDays($year, $month, $day);
-        $adYear = Calendar::START_YEAR_AD;
-        $adMonth = Calendar::START_MONTH_AD;
-        $adDay = Calendar::START_DAY_AD - 1;
-        for ($i = 0; $i < $totalDays; $i++) {
-            $adDay++;
-            if ($adDay > Calendar::getDaysInADMonth($adYear, $adMonth)) {
-                $adMonth++;
-                $adDay = 1;
-                if ($adMonth > 12) {
-                    $adYear++;
-                    $adMonth = 1;
-                }
+
+        return self::walkFromAnchor(
+            Calendar::START_YEAR_AD,
+            Calendar::START_MONTH_AD,
+            Calendar::START_DAY_AD - 1,
+            $totalDays,
+            Calendar::getDaysInADMonth(...)
+        );
+    }
+
+    /**
+     * A negative count only ever occurs converting AD dates that fall in
+     * {@see Calendar::START_YEAR_AD}, the one AD
+     * year that starts before the day-counting epoch used by getTotalADDays().
+     *
+     * @return array{int,int,int} [year, month, day]
+     */
+    private static function walkFromAnchor(int $year, int $month, int $day, int $steps, Closure $daysInMonth): array
+    {
+        return $steps >= 0
+            ? self::stepForward($year, $month, $day, $steps, $daysInMonth)
+            : self::stepBackward($year, $month, $day, -$steps, $daysInMonth);
+    }
+
+    /**
+     * @return array{int,int,int} [year, month, day]
+     */
+    private static function stepForward(int $year, int $month, int $day, int $remainingDays, Closure $daysInMonth): array
+    {
+        while (true) {
+            $daysUntilRollover = $daysInMonth($year, $month) - $day + 1;
+
+            if ($remainingDays < $daysUntilRollover) {
+                return [$year, $month, $day + $remainingDays];
+            }
+
+            $remainingDays -= $daysUntilRollover;
+            $day = 1;
+            $month++;
+            if ($month > 12) {
+                $month = 1;
+                $year++;
             }
         }
+    }
 
-        return [$adYear, $adMonth, $adDay];
+    /**
+     * @return array{int,int,int} [year, month, day]
+     */
+    private static function stepBackward(int $year, int $month, int $day, int $remainingDays, Closure $daysInMonth): array
+    {
+        while (true) {
+            if ($remainingDays < $day) {
+                return [$year, $month, $day - $remainingDays];
+            }
+
+            $remainingDays -= $day;
+            $month--;
+            if ($month < 1) {
+                $month = 12;
+                $year--;
+            }
+            $day = $daysInMonth($year, $month);
+        }
     }
 }

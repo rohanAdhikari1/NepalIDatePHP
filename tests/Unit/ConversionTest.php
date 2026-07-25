@@ -1,5 +1,6 @@
 <?php
 
+use RohanAdhikari\NepaliDate\Constants\Calendar;
 use RohanAdhikari\NepaliDate\Traits\DateConverter;
 
 describe('conversion', function () {
@@ -30,5 +31,34 @@ describe('conversion', function () {
         expect($date1)->toBe([2025, 10, 15]);
         $date2 = $class::callBStoAD(2061, 12, 15);
         expect($date2)->toBe([2005, 3, 28]);
+    });
+
+    it('round-trips a representative sample of BS dates through AD and back', function () use ($class) {
+        $mismatches = [];
+        $assertRoundTrips = function (int $year, int $month, int $day) use ($class, &$mismatches) {
+            $ad = $class::callBStoAD($year, $month, $day);
+            $roundTripped = $class::callADtoBS(...$ad);
+
+            if ($roundTripped !== [$year, $month, $day]) {
+                $mismatches[] = ['bs' => [$year, $month, $day], 'ad' => $ad, 'roundTripped' => $roundTripped];
+            }
+        };
+
+        for ($year = Calendar::START_YEAR_BS; $year <= Calendar::END_YEAR_BS; $year++) {
+            $assertRoundTrips($year, 1, 1);
+            $assertRoundTrips($year, 12, Calendar::getDaysInBSMonth($year, 12));
+        }
+
+        $sampleYears = [1900, 1950, 2000, 2050, 2082, 2100];
+        foreach ($sampleYears as $year) {
+            for ($month = 1; $month <= 12; $month++) {
+                $daysInMonth = Calendar::getDaysInBSMonth($year, $month);
+                for ($day = 1; $day <= $daysInMonth; $day++) {
+                    $assertRoundTrips($year, $month, $day);
+                }
+            }
+        }
+
+        expect($mismatches)->toBe([]);
     });
 });
