@@ -239,14 +239,39 @@ final class Calendar
     public const LEAP_MONTHS = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
     /**
-     * @var array<int,int>|null
+     * Days before the 1st of each AD month (index = month - 1).
      */
-    private static ?array $bsCumulativeDaysBeforeYear = null;
+    private const DAYS_BEFORE_AD_MONTH = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
+
+    private const DAYS_BEFORE_AD_MONTH_LEAP = [0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335];
 
     /**
-     * @var array<int,int>|null
+     * First BS year in {@see NEPALI_DATES}. Day number 0 is 1 Baisakh of this year;
+     * every AD and BS date is placed on that single shared day count.
      */
-    private static ?array $adCumulativeDaysBeforeYear = null;
+    private const EPOCH_YEAR_BS = 1899;
+
+    /**
+     * Day number of 1 Baisakh {@see START_YEAR_BS} (= {@see START_YEAR_AD}-{@see START_MONTH_AD}-{@see START_DAY_AD}).
+     */
+    private static int $bsStartDayNumber = 0;
+
+    /**
+     * Day number of 1 January {@see BASE_YEAR_AD}, the epoch of {@see getTotalADDays()}.
+     */
+    private static int $adBaseDayNumber = 0;
+
+    /**
+     * Shift that places proleptic-Gregorian day counts on the shared day count.
+     */
+    private static int $adDayNumberOffset = 0;
+
+    /**
+     * BS year => [day number of the 1st of month 1..12, then the 1st of the next year].
+     *
+     * @var array<int, list<int>>
+     */
+    private static array $bsMonthStarts = [];
 
     public static function isLeapYear(int $year): bool
     {
@@ -258,13 +283,12 @@ final class Calendar
         return self::NEPALI_DATES[$year][$month - 1];
     }
 
+    /**
+     * Day count where 1 Baisakh {@see START_YEAR_BS} is day 1.
+     */
     public static function getTotalBSDays(int $year, int $month, int $day): int
     {
-        $totalDays = self::bsDaysBeforeYear($year);
-        $totalDays += array_sum(array_slice(self::NEPALI_DATES[$year], 0, $month - 1));
-        $totalDays += $day;
-
-        return $totalDays;
+        return self::bsDayNumber($year, $month, $day) - self::$bsStartDayNumber + 1;
     }
 
     public static function getDayOfWeek(int $totalDays): int
@@ -277,11 +301,12 @@ final class Calendar
         return ((self::START_WEEK_DAY_BS - 2 + $totalDays) % 7) + 1;
     }
 
+    /**
+     * Day of week (1 = Sunday … 7 = Saturday) of a BS date.
+     */
     public static function calculateDayOfWeek(int $year, int $month, int $day): int
     {
-        $totalDays = self::getTotalBSDays($year, $month, $day);
-
-        return self::getDayOfWeek($totalDays);
+        return self::dayOfWeekFromDayNumber(self::bsDayNumber($year, $month, $day));
     }
 
     public static function getDaysInADMonth(int $year, int $month): int
@@ -289,49 +314,158 @@ final class Calendar
         return self::isLeapYear($year) ? self::LEAP_MONTHS[$month - 1] : self::NORMAL_MONTHS[$month - 1];
     }
 
+    /**
+     * Day count where 1 January {@see BASE_YEAR_AD} is day 1 (dates in earlier years are <= 0).
+     */
     public static function getTotalADDays(int $year, int $month, int $day): int
     {
-        $totalDays = self::adDaysBeforeYear($year);
-        $months = self::isLeapYear($year) ? self::LEAP_MONTHS : self::NORMAL_MONTHS;
-        $totalDays += array_sum(array_slice($months, 0, $month - 1));
-        $totalDays += $day;
-
-        return $totalDays;
+        return self::adDayNumber($year, $month, $day) - self::$adBaseDayNumber + 1;
     }
 
-    private static function bsDaysBeforeYear(int $year): int
+    /**
+     * Shared day number of a BS date. Expects a date inside {@see NEPALI_DATES}.
+     *
+     * @internal used by the converter; not part of the public API
+     */
+    public static function bsDayNumber(int $year, int $month, int $day): int
     {
-        if ($year <= self::BASE_YEAR_BS) {
-            return 0;
+        if (! self::$bsMonthStarts) {
+            self::buildTables();
         }
 
-        self::$bsCumulativeDaysBeforeYear ??= [self::BASE_YEAR_BS => 0];
-        $cache = &self::$bsCumulativeDaysBeforeYear;
-
-        for ($cachedYear = array_key_last($cache) + 1; $cachedYear <= $year; $cachedYear++) {
-            $cache[$cachedYear] = $cache[$cachedYear - 1] + array_sum(self::NEPALI_DATES[$cachedYear - 1]);
-        }
-
-        return $cache[$year];
+        return self::$bsMonthStarts[$year][$month - 1] + $day - 1;
     }
 
-    private static function adDaysBeforeYear(int $year): int
+    /**
+     * Shared day number of an AD (proleptic Gregorian) date. Works for any year.
+     *
+     * @internal used by the converter; not part of the public API
+     */
+    public static function adDayNumber(int $year, int $month, int $day): int
     {
-        if ($year === self::START_YEAR_AD) {
-            return -(self::isLeapYear(self::START_YEAR_AD) ? 366 : 365);
+        if (! self::$bsMonthStarts) {
+            self::buildTables();
+        }
+        $daysBeforeMonth = self::isLeapYear($year) ? self::DAYS_BEFORE_AD_MONTH_LEAP : self::DAYS_BEFORE_AD_MONTH;
+
+        return self::gregorianDaysBeforeYear($year) + $daysBeforeMonth[$month - 1] + $day - 1 + self::$adDayNumberOffset;
+    }
+
+    /**
+     * BS date for a shared day number. Expects a day number inside {@see NEPALI_DATES}.
+     *
+     * @internal used by the converter; not part of the public API
+     *
+     * @return array{int,int,int} [year, month, day]
+     */
+    public static function bsDateFromDayNumber(int $dayNumber): array
+    {
+        if (! self::$bsMonthStarts) {
+            self::buildTables();
         }
 
-        if ($year <= self::BASE_YEAR_AD) {
-            return 0;
+        // Estimate the year, then correct by at most a step either way.
+        $year = self::EPOCH_YEAR_BS + intdiv($dayNumber, 366);
+        while (self::$bsMonthStarts[$year][0] > $dayNumber) {
+            $year--;
+        }
+        while (self::$bsMonthStarts[$year][12] <= $dayNumber) {
+            $year++;
         }
 
-        self::$adCumulativeDaysBeforeYear ??= [self::BASE_YEAR_AD => 0];
-        $cache = &self::$adCumulativeDaysBeforeYear;
-
-        for ($cachedYear = array_key_last($cache) + 1; $cachedYear <= $year; $cachedYear++) {
-            $cache[$cachedYear] = $cache[$cachedYear - 1] + (self::isLeapYear($cachedYear - 1) ? 366 : 365);
+        $starts = self::$bsMonthStarts[$year];
+        $month = 1;
+        while ($starts[$month] <= $dayNumber) {
+            $month++;
         }
 
-        return $cache[$year];
+        return [$year, $month, $dayNumber - $starts[$month - 1] + 1];
+    }
+
+    /**
+     * AD (proleptic Gregorian) date for a shared day number.
+     *
+     * @internal used by the converter; not part of the public API
+     *
+     * @return array{int,int,int} [year, month, day]
+     */
+    public static function adDateFromDayNumber(int $dayNumber): array
+    {
+        if (! self::$bsMonthStarts) {
+            self::buildTables();
+        }
+        $gregorianDay = $dayNumber - self::$adDayNumberOffset;
+
+        // Estimate the year, then correct by at most a step either way.
+        $year = intdiv($gregorianDay * 400, 146097) + 1;
+        while (self::gregorianDaysBeforeYear($year) > $gregorianDay) {
+            $year--;
+        }
+        while (self::gregorianDaysBeforeYear($year + 1) <= $gregorianDay) {
+            $year++;
+        }
+
+        $dayOfYear = $gregorianDay - self::gregorianDaysBeforeYear($year);
+        $daysBeforeMonth = self::isLeapYear($year) ? self::DAYS_BEFORE_AD_MONTH_LEAP : self::DAYS_BEFORE_AD_MONTH;
+        $month = 12;
+        while ($daysBeforeMonth[$month - 1] > $dayOfYear) {
+            $month--;
+        }
+
+        return [$year, $month, $dayOfYear - $daysBeforeMonth[$month - 1] + 1];
+    }
+
+    /**
+     * Day of week (1 = Sunday … 7 = Saturday) for a shared day number.
+     * Anchored on 1 Baisakh {@see START_YEAR_BS}, which is weekday {@see START_WEEK_DAY_AD}.
+     *
+     * @internal used by the converter; not part of the public API
+     */
+    public static function dayOfWeekFromDayNumber(int $dayNumber): int
+    {
+        if (! self::$bsMonthStarts) {
+            self::buildTables();
+        }
+
+        return (($dayNumber - self::$bsStartDayNumber + self::START_WEEK_DAY_AD - 1) % 7 + 7) % 7 + 1;
+    }
+
+    /**
+     * Days from 1 January of year 1 (proleptic Gregorian) to 1 January of $year.
+     */
+    private static function gregorianDaysBeforeYear(int $year): int
+    {
+        $y = $year - 1;
+
+        return 365 * $y + intdiv($y, 4) - intdiv($y, 100) + intdiv($y, 400);
+    }
+
+    /**
+     * Builds every lookup table in one pass, once per process (~200 years, a few KB).
+     */
+    private static function buildTables(): void
+    {
+        $starts = [];
+        $dayNumber = 0;
+        foreach (self::NEPALI_DATES as $year => $months) {
+            $row = [];
+            foreach ($months as $daysInMonth) {
+                $row[] = $dayNumber;
+                $dayNumber += $daysInMonth;
+            }
+            $row[] = $dayNumber;
+            $starts[$year] = $row;
+        }
+
+        self::$bsStartDayNumber = $starts[self::START_YEAR_BS][0];
+
+        // 1 Baisakh START_YEAR_BS falls on START_YEAR_AD-START_MONTH_AD-START_DAY_AD.
+        $daysBeforeMonth = self::isLeapYear(self::START_YEAR_AD) ? self::DAYS_BEFORE_AD_MONTH_LEAP : self::DAYS_BEFORE_AD_MONTH;
+        $anchorGregorianDay = self::gregorianDaysBeforeYear(self::START_YEAR_AD)
+            + $daysBeforeMonth[self::START_MONTH_AD - 1] + self::START_DAY_AD - 1;
+        self::$adDayNumberOffset = self::$bsStartDayNumber - $anchorGregorianDay;
+        self::$adBaseDayNumber = self::gregorianDaysBeforeYear(self::BASE_YEAR_AD) + self::$adDayNumberOffset;
+
+        self::$bsMonthStarts = $starts;
     }
 }

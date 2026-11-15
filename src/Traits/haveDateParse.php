@@ -173,13 +173,12 @@ trait haveDateParse
         if (isset($dateMap['timestamp'])) {
             return static::fromTimestamp((int) $dateMap['timestamp'], $timezone);
         }
-        $now = static::now();
         $year = $month = $day = null;
         $hour = $minute = $second = 0;
 
         // --- YEAR ---
         if (isset($dateMap['year_short'])) {
-            $year = (int) substr((string) $now->year, 0, 2).$dateMap['year_short'];
+            $year = (int) substr((string) static::now()->year, 0, 2).$dateMap['year_short'];
         }
         if (isset($dateMap['year'])) {
             $year = (int) $dateMap['year'];
@@ -236,7 +235,13 @@ trait haveDateParse
             $second = (int) $dateMap['second'];
         }
 
-        $date = new static($year ?? $now->year, $month ?? $now->month, $day ?? 1, $hour, $minute, $second, $timezone);
+        // "Now" is a full AD -> BS conversion, so only compute it when a part is missing.
+        if ($year === null || $month === null) {
+            $now = static::now();
+            $year ??= $now->year;
+            $month ??= $now->month;
+        }
+        $date = new static($year, $month, $day ?? 1, $hour, $minute, $second, $timezone);
         if (! $day) {
             if (isset($dateMap['weekday_num'])) {
                 return $date->shiftToNearWeek((int) $dateMap['weekday_num']);
