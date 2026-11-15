@@ -56,8 +56,8 @@ If the project maintainer has any additional requirements, you will find them li
 
 `src/Constants/Calendar.php`, `src/Traits/DateConverter.php`, and `src/Traits/haveDateFormats.php` are the hot path for every date operation in the library — AD ⇄ BS conversion and formatting run through them on every `NepaliDate::now()`, `fromAd()`, `toAd()`, and `format()` call. If your PR touches any of these:
 
-- Read [Performance Internals](../docs/PERFORMANCE_INTERNALS.md) first — it explains the current algorithm, why it's shaped the way it is, and what's already been tried and rejected.
+- Read [Performance](../docs/PERFORMANCE.md) first — it explains how conversion works (prefix sums, then estimating and correcting the year).
 - Run `composer run time:check` before and after your change, and include the numbers in your PR description.
-- Run `php check/VerifyConversionRoundTrip.php` (takes 1-2 minutes) to confirm every date in the supported range still converts correctly — this is what caught two real bugs during the v2 rewrite, and it's the only thing that exercises the full 1900–2100 range.
+- Run `composer test` (it checks every date in the supported range, both directions) and `php check/VerifyAgainstLegacyConverter.php` to confirm conversions still match.
 
 **Happy coding**!
