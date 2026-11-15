@@ -82,6 +82,35 @@ echo formatRow(
     }, $iterations)
 );
 
+$sampleBsStrings = array_map(
+    static fn(NepaliDate $bs): string => $bs->format(NepaliDate::FORMAT_DATE_YMD),
+    $sampleBsDates
+);
+
+echo formatRow(
+    'Parse     (parse Y-m-d, 1st default)',
+    $iterations,
+    benchmark(function (int $i) use ($sampleBsStrings) {
+        NepaliDate::parse($sampleBsStrings[$i % count($sampleBsStrings)]);
+    }, $iterations)
+);
+
+echo formatRow(
+    'Parse     (parse ISO 8601 c, 10th)',
+    $iterations,
+    benchmark(function (int $i) use ($sampleBsStrings) {
+        NepaliDate::parse($sampleBsStrings[$i % count($sampleBsStrings)] . 'T10:20:30+05:45');
+    }, $iterations)
+);
+
+echo formatRow(
+    'Parse     (createFromFormat Y-m-d)',
+    $iterations,
+    benchmark(function (int $i) use ($sampleBsStrings) {
+        NepaliDate::createFromFormat(NepaliDate::FORMAT_DATE_YMD, $sampleBsStrings[$i % count($sampleBsStrings)]);
+    }, $iterations)
+);
+
 echo formatRow(
     'now() -> BS',
     $iterations,
